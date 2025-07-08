@@ -1,0 +1,7 @@
+{
+  "name": "Ngfy",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
