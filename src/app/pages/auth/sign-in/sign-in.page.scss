@@ -1,0 +1,23 @@
+
+ion-button {
+    text-transform: none;
+    width: 40%;
+    margin-top: 25px;
+}
+
+ion-content{
+    --padding-top: 80px;
+}
+.container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+    width: 70%;
+}
+.centered-form, .logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

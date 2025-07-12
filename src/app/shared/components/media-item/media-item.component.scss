@@ -1,0 +1,43 @@
+ion-item::part(native) {
+    background: #262626;
+    color: #fff;
+    border-color:  #262626;
+    border-width: 1px;
+    border-radius: 16px;
+
+}
+
+ion-item.shrink-on-press:active {
+  transform: scale(0.95);
+  transition: transform 0.15s ease;
+}
+
+ion-thumbnail {
+  --size: 60px;
+  --border-radius: 10px;
+}
+
+h2{
+  display: -webkit-box;    
+  -webkit-box-orient: vertical; 
+  -webkit-line-clamp: 2;
+  line-clamp: 2;     
+  overflow: hidden;          
+  text-overflow: ellipsis;  
+  margin: 0;               
+  white-space: normal;  
+  font-size: 15px;
+}
+
+p{
+  margin-top: 5px;
+  font-size: 12px;
+  white-space: nowrap;  
+  overflow: hidden;     
+  text-overflow: ellipsis; 
+  display: block;
+}
+
+.icon-top {
+  font-size: 22px; 
+}

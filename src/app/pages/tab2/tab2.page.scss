@@ -1,0 +1,42 @@
+
+.list{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+ion-toolbar {
+    --background: #121212;
+    --color: white;
+    --padding-end: 10px;
+    --padding-start: 10px;
+    
+}
+
+h2 {
+    color: white;
+    margin-left: 10px;
+}
+
+.icon-text-btn {
+    --background: transparent;
+    --color: var(--ion-color-primary);
+    --border-width: 0;
+    --box-shadow: none;
+    font-weight: normal;
+    text-transform: none;
+}
+
+.list-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0 12px 10px
+    
+}
+
+span {
+    font-size: 18px;
+    color: gray;
+    font-weight: 600;
+}

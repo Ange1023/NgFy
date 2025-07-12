@@ -1,0 +1,47 @@
+<ion-header [translucent]="false">
+  <ion-toolbar>
+    <h2>Playlist</h2>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class="list">
+    <app-media-item
+      [name]="'Favorites'"
+      [image]="'../../../assets/my-favorites.png'"
+      [numberOfTracks]="5"
+      [isPlaylist]="true"
+    />
+
+    <app-media-item
+      [name]="'Your Songs'"
+      [image]="'../../../assets/my-songs.png'"
+      [numberOfTracks]="5"
+      [isPlaylist]="true"
+    />
+  
+  </div>
+
+  <div class="list-header">
+    <span>All playlist</span>
+    <ion-button fill="clear" class="icon-text-btn">
+      <ion-icon slot="start" name="add-circle-outline"></ion-icon>
+      Add new
+    </ion-button>
+  </div>
+
+
+  <div class="list">
+    @for (item of items; track $index) {
+      <app-media-item 
+        [name]="item.name" 
+        [image]="item.image"
+        [numberOfTracks]="item.numberOfTracks"
+        [isPlaylist]="true"
+        [isOwner]="true"
+        (itemClick)="onItemClick(item.id)"
+      />
+    }
+  </div>
+</ion-content>

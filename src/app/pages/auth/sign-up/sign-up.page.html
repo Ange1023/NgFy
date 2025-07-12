@@ -1,0 +1,76 @@
+<ion-content class="ion-padding">
+
+  <div class="logo-container">
+    <ion-img src="../../../../assets/icon/favicon.png" alt="App Logo" style="width: 180px;"></ion-img>
+  </div>
+
+  <form [formGroup]="form" class="centered-form">
+    <div class="container">
+      <ion-input 
+        label-placement="floating"
+        placeholder="Enter your email"
+        type="email"
+        label="Email"
+        [formControl]="form.controls.email"
+        [errorText]="form.controls.email.errors?.['required'] &&'Email is required'"
+      ></ion-input>
+
+      <br/>
+
+      <ion-input 
+        label-placement="floating"
+        placeholder="Enter your username"
+        type="text"
+        label="Username"
+        [formControl]="form.controls.user_name"
+        [errorText]="form.controls.user_name.errors?.['required'] && 'Username is required'"
+      ></ion-input>
+
+      <br/>
+
+      <ion-input 
+        label-placement="floating"
+        placeholder="Enter your first name"
+        type="text"
+        label="First Name"
+        [formControl]="form.controls.first_name"
+        [errorText]="form.controls.first_name.errors?.['required'] && 'First name is required'"
+      ></ion-input>
+
+      <br/>
+
+      <ion-input 
+        label-placement="floating"
+        placeholder="Enter your last name"
+        type="text"
+        label="Last Name"
+        [formControl]="form.controls.last_name"
+        [errorText]="form.controls.last_name.errors?.['required'] && 'Last name is required'"
+      ></ion-input>
+
+      <br/>
+
+      <ion-input 
+        label-placement="floating"
+        placeholder="Enter your password"
+        type="password"
+        label="Password"
+        [formControl]="form.controls.password"
+        [errorText]="form.controls.password.errors?.['required'] && 'Password is required'"
+      >
+    </ion-input>
+
+      <br/>
+      
+      <a routerLink="/sign-in">
+        Already have an account?
+      </a>
+      
+      <ion-button color="medium" type="submit" [disabled]="form.invalid" (click)="submit()" (keyup.enter)="submit()">
+        Sign Up
+      </ion-button>
+
+    </div>
+  </form>
+  
+</ion-content>

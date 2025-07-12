@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <h2>Explore</h2>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar placeholder="Search" class="custom"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class="media-list">
+    @for (item of items; track $index) {
+      <app-media-item 
+        [name]="item.name" 
+        [autor]="item.autor" 
+        [runtime]="formatRuntime(item.runtime)" 
+        [image]="item.image"
+      >
+    </app-media-item>
+    }
+  </div>
+</ion-content>

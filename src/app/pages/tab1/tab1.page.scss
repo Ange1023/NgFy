@@ -1,0 +1,27 @@
+
+.media-list{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+ion-searchbar.custom {
+    --background: #262626;
+    --color: #fff;
+    --placeholder-color: #fff;
+    --icon-color: #fff;
+    --clear-button-color: #fff;
+    --border-radius: 15px;
+}
+
+ion-toolbar {
+    --background: #121212;
+    --color: white;
+    --padding-end: 10px;
+    --padding-start: 10px;
+}
+
+h2 {
+    color: white;
+    margin-left: 10px;
+}

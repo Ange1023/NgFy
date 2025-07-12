@@ -1,0 +1,30 @@
+<ion-item lines="none" class="shrink-on-press" (click)="itemClick.emit()">
+
+  <ion-thumbnail slot="start">
+    <img src={{image}} />
+  </ion-thumbnail>
+
+  <ion-label>
+    <h2>{{name}}</h2>
+    @if(!isPlaylist){
+      <p>{{runtime}} - {{autor}}</p>
+    } @else {
+      <p>{{numberOfTracks}} tracks</p>
+    }
+  </ion-label>
+
+  @if(isOwner){
+    <ion-icon slot="end" name="ellipsis-vertical" class="icon-top"></ion-icon>
+  } @else {
+    @if (!isPlaylist){
+      @if (isFavorite) {
+        <ion-icon slot="end" name="heart"></ion-icon>
+      } @else {
+        <ion-icon slot="end" name="heart-outline"></ion-icon>
+      }
+    } @else {
+      <ion-icon slot="end" name="chevron-forward-outline" color="primary"></ion-icon>
+    }  
+  }
+  
+</ion-item>
