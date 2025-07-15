@@ -15,7 +15,7 @@ import { ellipsisVertical, heart, heartOutline, chevronForwardOutline} from 'ion
 
 export class MediaItemComponent implements OnInit {
 
-  @Input() runtime: string = '';
+  @Input() runtime: number = 0;
   @Input() image: string = '';
   @Input() name: string = '';
   @Input() autor: string = '';
@@ -23,10 +23,17 @@ export class MediaItemComponent implements OnInit {
   @Input() isFavorite: boolean = false;
   @Input() numberOfTracks: number = 0;
   @Input() isPlaylist: boolean = false;
+  @Input() isPreview: boolean = false;
   @Output() itemClick = new EventEmitter<void>();
 
   constructor() { 
     addIcons({heart, heartOutline, ellipsisVertical, chevronForwardOutline});
+  }
+
+  formatRuntime(seconds: number): string {
+    const min = Math.floor(seconds / 60);
+    const sec = Math.floor(seconds % 60);
+    return `${min}:${sec.toString().padStart(2, '0')}`;
   }
 
   ngOnInit() {}

@@ -1,4 +1,9 @@
-<ion-item lines="none" class="shrink-on-press" (click)="itemClick.emit()">
+<ion-item 
+  lines="none" 
+  (click)="!isPreview && itemClick.emit()"
+  [class.shrink-on-press]="!isPreview"
+  [class.preview]="isPreview"
+  >
 
   <ion-thumbnail slot="start">
     <img src={{image}} />
@@ -7,7 +12,7 @@
   <ion-label>
     <h2>{{name}}</h2>
     @if(!isPlaylist){
-      <p>{{runtime}} - {{autor}}</p>
+      <p>{{formatRuntime(runtime)}} - {{autor}}</p>
     } @else {
       <p>{{numberOfTracks}} tracks</p>
     }
@@ -23,7 +28,9 @@
         <ion-icon slot="end" name="heart-outline"></ion-icon>
       }
     } @else {
-      <ion-icon slot="end" name="chevron-forward-outline" color="primary"></ion-icon>
+      @if(!isPreview){
+        <ion-icon slot="end" name="chevron-forward-outline" color="primary"></ion-icon>
+      }
     }  
   }
   

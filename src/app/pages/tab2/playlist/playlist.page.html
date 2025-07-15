@@ -1,13 +1,31 @@
-<ion-header [translucent]="true">
+<ion-header [translucent]="false">
   <ion-toolbar>
-    <ion-title>playlist</ion-title>
+    <h2>{{playlist?.name}}</h2>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">playlist</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  
+  <app-media-item
+    [name]="playlist!.name"
+    [image]="playlist!.image"
+    [numberOfTracks]="playlist!.numberOfTracks"
+    [isPlaylist]="true"
+    [isPreview]="true"
+  />
+
+  <div class="media-list">
+    @for (item of items; track $index) {
+      <app-media-item 
+        [name]="item.name" 
+        [autor]="item.autor" 
+        [runtime]="item.runtime" 
+        [image]="item.image"
+        [isOwner]="true"
+      >
+    </app-media-item>
+    }
+  </div>
+ 
+
 </ion-content>

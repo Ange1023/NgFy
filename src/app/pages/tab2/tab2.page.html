@@ -6,7 +6,7 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <div class="list">
+  <div class="media-list">
     <app-media-item
       [name]="'Favorites'"
       [image]="'../../../assets/my-favorites.png'"
@@ -32,7 +32,7 @@
   </div>
 
 
-  <div class="list">
+  <div class="media-list">
     @for (item of items; track $index) {
       <app-media-item 
         [name]="item.name" 
