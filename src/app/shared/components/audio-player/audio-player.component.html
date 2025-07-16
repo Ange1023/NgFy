@@ -1,0 +1,29 @@
+
+<div class="player-container">
+
+  <div class="time-display">
+    <span class="current-time">{{ formatTime(currentTime) }}</span>
+    <span class="duration">{{ formatTime(duration) }}</span>
+  </div>
+  
+  <ion-range
+    [value]="progress"
+    (ionChange)="seek($event)"
+    [pin]="false"
+    class="progress-bar"
+  ></ion-range>
+  
+  <div class="controls">
+    <ion-button fill="clear" (click)="previousSong()">
+      <ion-icon name="play-skip-back-sharp" slot="icon-only"></ion-icon>
+    </ion-button>
+    
+    <ion-button fill="clear" (click)="togglePlay()" class="play-pause-button">
+      <ion-icon [name]="isPlaying ? 'pause-circle' : 'play-circle'" slot="icon-only"></ion-icon>
+    </ion-button>
+    
+    <ion-button fill="clear" (click)="nextSong()">
+      <ion-icon name="play-skip-forward-sharp" slot="icon-only"></ion-icon>
+    </ion-button>
+  </div>
+</div>

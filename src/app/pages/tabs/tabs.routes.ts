@@ -6,20 +6,42 @@ export const routes: Routes = [
     path: 'tabs',
     component: TabsPage,
     children: [
+      
       {
         path: 'tab1',
-        loadComponent: () =>
-          import('../tab1/tab1.page').then((m) => m.Tab1Page),
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('../tab1/tab1.page').then((m) => m.Tab1Page),
+          },
+          {
+            path: ':id',
+            loadComponent: () => import('../song/song.page').then( m => m.SongPage)
+          },
+        ]
       },
       {
         path: 'tab2',
-        loadComponent: () =>
-          import('../tab2/tab2.page').then((m) => m.Tab2Page),
-      },
-      {
-        path: 'tab2/playlist/:id',
-        loadComponent: () =>
-          import('../tab2/playlist/playlist.page').then((m) => m.PlaylistPage),
+        children: [
+          {
+            path: '',
+            loadComponent: () => import('../tab2/tab2.page').then((m) => m.Tab2Page),
+          },
+          {
+            path: ':id',
+            children: [
+              {
+                path: '',
+                loadComponent: () => import('../tab2/playlist/playlist.page').then((m) => m.PlaylistPage),
+              },
+              {
+                path: ':id',
+                loadComponent: () => import('../song/song.page').then((m) => m.SongPage)
+              }
+            ]
+          },
+
+        ]
       },
       {
         path: 'tab3',
@@ -31,6 +53,7 @@ export const routes: Routes = [
         redirectTo: '/tabs/tab1',
         pathMatch: 'full',
       },
+      
     ],
   },
   {

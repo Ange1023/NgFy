@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {IonicModule} from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { MediaItemComponent } from 'src/app/shared/components/media-item/media-item.component';
 
 @Component({
@@ -65,6 +66,13 @@ export class Tab1Page {
       autor: 'Autor 3'
     }
   ];
-  constructor() {}
+  constructor(private navCtrl: NavController ) {}
+
+  onSongClick(songId: number | string) {
+    console.log('Click en canción:', songId);
+    this.navCtrl.navigateForward(['tabs', 'tab1', songId], {
+      animationDirection: 'forward' 
+    });
+  }
 
 }

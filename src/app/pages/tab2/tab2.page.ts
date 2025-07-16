@@ -3,7 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { MediaItemComponent } from '../../shared/components/media-item/media-item.component';
 import { addIcons } from 'ionicons';
 import { addCircleOutline } from 'ionicons/icons';
-import { Router } from '@angular/router';
+import { NavController } from '@ionic/angular';
 
 
 @Component({
@@ -20,13 +20,16 @@ export class Tab2Page {
     { id: 3, name: 'Item 3', image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',numberOfTracks: 8 },
   ]
 
-  constructor(private router: Router) {
+  constructor(private navCtrl: NavController) {
     addIcons({addCircleOutline})
   }
 
-  onItemClick(item_id: number) {
+  onItemClick(item_id: number | string) {
   console.log('Click en:', item_id);
-  this.router.navigate(['tabs', 'tab2', 'playlist', item_id]);
+  
+  this.navCtrl.navigateForward(['tabs', 'tab2', item_id], {
+    animationDirection: 'forward' 
+  });
 
 }
 }

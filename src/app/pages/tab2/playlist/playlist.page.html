@@ -1,6 +1,8 @@
 <ion-header [translucent]="false">
   <ion-toolbar>
-    <h2>{{playlist?.name}}</h2>
+    <ion-buttons slot="start" (click)="goBack()">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -22,6 +24,7 @@
         [runtime]="item.runtime" 
         [image]="item.image"
         [isOwner]="true"
+        (itemClick)="onSongClick(item.name)"
       >
     </app-media-item>
     }

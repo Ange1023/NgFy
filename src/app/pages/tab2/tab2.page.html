@@ -12,6 +12,7 @@
       [image]="'../../../assets/my-favorites.png'"
       [numberOfTracks]="5"
       [isPlaylist]="true"
+      (itemClick)="onItemClick('favorites')"
     />
 
     <app-media-item
@@ -19,6 +20,7 @@
       [image]="'../../../assets/my-songs.png'"
       [numberOfTracks]="5"
       [isPlaylist]="true"
+      (itemClick)="onItemClick('my-songs')"
     />
   
   </div>

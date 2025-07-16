@@ -16,6 +16,7 @@
         [autor]="item.autor" 
         [runtime]="item.runtime" 
         [image]="item.image"
+        (itemClick)="onSongClick(item.name)"
       >
     </app-media-item>
     }
