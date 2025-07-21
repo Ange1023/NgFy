@@ -1,7 +1,7 @@
 <ion-content class="ion-padding">
 
   <div class="logo-container">
-    <ion-img src="../../../../assets/icon/favicon.png" alt="App Logo" style="width: 180px;"></ion-img>
+    <img src="../../../../assets/login.png" alt="App Logo" class="neon-logo" style="width: 350px;">
   </div>
 
   <form [formGroup]="form" class="centered-form">
@@ -30,7 +30,7 @@
       <br/>
 
       <a routerLink="/sign-up">
-        Don't have an account? Sign In
+        Don't have an account? Sign Up
       </a>
       
       <ion-button color="medium" type="submit" [disabled]="form.invalid" (click)="submit()" (keyup.enter)="submit()">

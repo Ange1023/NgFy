@@ -1,7 +1,7 @@
 <ion-content class="ion-padding">
 
   <div class="logo-container">
-    <ion-img src="../../../../assets/icon/favicon.png" alt="App Logo" style="width: 180px;"></ion-img>
+    <img src="../../../../assets/login.png" alt="App Logo" class="neon-logo" style="width: 350px;">
   </div>
 
   <form [formGroup]="form" class="centered-form">
@@ -60,7 +60,12 @@
       >
     </ion-input>
 
-      <br/>
+    <br/>
+        <ion-checkbox
+          [formControl]="form.controls.author"
+          slot="end"
+        >Are you an author?</ion-checkbox>
+    <br/>
       
       <a routerLink="/sign-in">
         Already have an account?

@@ -1,9 +1,12 @@
 import { Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth-guard.guard';
+import { LoginGuard } from './guards/no-auth-guard.guard';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'tabs',
     loadChildren: () => import('./pages/tabs/tabs.routes').then((m) => m.routes),
+    canActivate: [AuthGuard]
   },
   {
     path: 'sign-up',
@@ -11,7 +14,12 @@ export const routes: Routes = [
   },
   {
     path: 'sign-in',
-    loadComponent: () => import('./pages/auth/sign-in/sign-in.page').then( m => m.SignInPage)
+    loadComponent: () => import('./pages/auth/sign-in/sign-in.page').then( m => m.SignInPage),
+    canActivate: [LoginGuard]
   },
-
+  {
+    path: '',
+    redirectTo: '/sign-in',
+    pathMatch: 'full'
+  }
 ];
