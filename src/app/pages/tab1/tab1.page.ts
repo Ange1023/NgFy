@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import {IonicModule} from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { MediaItemComponent } from 'src/app/shared/components/media-item/media-item.component';
+import { addIcons } from 'ionicons';
+import { add } from 'ionicons/icons';
+import { SongService } from 'src/app/services/song.service';
 
 @Component({
   selector: 'app-tab1',
@@ -10,63 +13,35 @@ import { MediaItemComponent } from 'src/app/shared/components/media-item/media-i
   imports: [IonicModule, MediaItemComponent],
 })
 export class Tab1Page {
-  items = [
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Yeah Yeah Yeahs'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 2',
-      autor: 'Autor 2'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    },
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Autor 1'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 2',
-      autor: 'Autor 2'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    },
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Autor 1'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 2',
-      autor: 'Autor 2'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    }
-  ];
-  constructor(private navCtrl: NavController ) {}
+  items: any[] = [];
+
+  constructor(
+    private navCtrl: NavController,
+    private songService: SongService) {
+    addIcons({
+      add
+    });
+  }
+
+  ngOnInit() {
+    this.songService.getPaginateSongs(1, 10).subscribe({
+      next: (response) => {
+  
+        console.log('Canciones cargadas:', response.data);
+        this.items = response.data.data.map((song: any) => ({
+          id: song._id,
+          runtime: song.duration,
+          image: song.poster_image,
+          name: song.title,
+          autor: song.artist
+        }));
+        
+      },
+      error: (error) => {
+        console.error('Error al cargar canciones:', error);
+      }
+    });
+  }
 
   onSongClick(songId: number | string) {
     console.log('Click en canción:', songId);
@@ -75,4 +50,7 @@ export class Tab1Page {
     });
   }
 
+  onClick() {
+    console.log('Add button clicked');
+    }
 }

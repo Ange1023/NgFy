@@ -24,10 +24,11 @@ export class MediaItemComponent implements OnInit {
   @Input() numberOfTracks: number = 0;
   @Input() isPlaylist: boolean = false;
   @Input() isPreview: boolean = false;
+  @Input() id: string = '';
   @Output() itemClick = new EventEmitter<void>();
 
-  constructor() { 
-    addIcons({heart, heartOutline, ellipsisVertical, chevronForwardOutline});
+  constructor() {
+    addIcons({ heart, heartOutline, ellipsisVertical, chevronForwardOutline });
   }
 
   formatRuntime(seconds: number): string {

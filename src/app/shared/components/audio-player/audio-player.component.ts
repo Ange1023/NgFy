@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -13,7 +13,7 @@ import { playSkipForwardSharp, playSkipBackSharp, pauseCircle, playCircle} from 
   imports: [CommonModule, FormsModule, IonicModule]
 })
 export class AudioPlayerComponent implements OnInit {
-  @Input() audioSrc: string = '';
+  @Input() audioSrc!: string;
   @Output() playEvent = new EventEmitter<void>();
   @Output() pauseEvent = new EventEmitter<void>();
   
@@ -35,6 +35,12 @@ export class AudioPlayerComponent implements OnInit {
 
   ngOnInit() {
     if (this.audioSrc) {
+      this.setupAudio();
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['audioSrc'] && changes['audioSrc'].currentValue) {
       this.setupAudio();
     }
   }

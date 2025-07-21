@@ -34,7 +34,11 @@ export class AuthService {
       'auth/signup',
       'POST',
       userData
-    );
+    ).pipe(
+      tap(response =>  {
+        const { password, ...userWithoutPassword } = response.data.user;
+        SecureStoragePlugin.set({ key: 'user_data', value: userWithoutPassword });
+    }));
   }
 
   private async storeAuthData(authData: any): Promise<void> {
@@ -57,6 +61,27 @@ export class AuthService {
       catchError(error => {
         console.error('Error al obtener token:', error);
         return of(null);
+      })
+    );
+  }
+
+  getUserData(): Observable<any> {
+    return from(SecureStoragePlugin.get({ key: 'user_data' })).pipe(
+      switchMap(result => of(result.value ? JSON.parse(result.value) : null)),
+      catchError(error => {
+        console.error('Error al obtener datos del usuario:', error);
+        return of(null);
+      })
+    );
+  }
+
+  isAuthor(): Observable<boolean> {
+    return this.getUserData().pipe(
+      switchMap(userData => of(userData?.author || false)),
+      tap(isAuthor => console.log('Is author:', isAuthor)),
+      catchError(error => {
+        console.error('Error al verificar autoría:', error);
+        return of(false);
       })
     );
   }

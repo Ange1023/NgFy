@@ -3,6 +3,7 @@ import { NavController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { heartOutline } from 'ionicons/icons';
+import { SongService } from 'src/app/services/song.service';
 import { ActivatedRoute } from '@angular/router';
 import { AudioPlayerComponent } from 'src/app/shared/components/audio-player/audio-player.component';
 
@@ -15,19 +16,20 @@ import { AudioPlayerComponent } from 'src/app/shared/components/audio-player/aud
 })
 export class SongPage implements OnInit, AfterViewInit {
 
-  item = {
-    runtime: 120,
-    image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-    name: 'Spitting Off the Edge Of the World',
-    autor: 'Yeah Yeah Yeahs'
-  }
   private activatedRoute = inject(ActivatedRoute);
   private songId!: string | null;
-  song: string | null = null;
 
-  audioUrl = '../../../assets/audio.mp3'
+  item: any = {
+    runtime: '',
+    image: '',
+    name: '',
+    artist: '',
+    url: ''
+  };
 
-  constructor(private navCtrl: NavController ) { 
+  constructor(
+    private navCtrl: NavController,
+    private songService: SongService) { 
     addIcons({
       heartOutline
     });
@@ -40,8 +42,27 @@ export class SongPage implements OnInit, AfterViewInit {
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.songId = params.get('id');
-      this.song = this.songId;
-    });
+      if (this.songId) {
+        this.songService.getSongById(this.songId).subscribe({
+          next: (response) => {
+
+            const songData = response.data.song;
+
+            this.item = {
+              runtime: songData.duration,
+              image: songData.poster_image,
+              name: songData.title,
+              artist: songData.artist,
+              url: songData.url
+            };
+
+          },
+        error: (error) => {
+          console.error('Error al cargar la canción:', error);
+        }
+      });
+    }
+  });
   }
 
   ngAfterViewInit() {

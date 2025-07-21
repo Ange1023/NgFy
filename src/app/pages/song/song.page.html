@@ -17,23 +17,23 @@
         <div
           class="led-marquee"
           [class.animate]="shouldAnimate"
-          [attr.data-text]="shouldAnimate ? song : null"
+          [attr.data-text]="shouldAnimate ? item.name : null"
           #marquee
         >
         @if(shouldAnimate) {
-          {{ song! }} &nbsp; - &nbsp;
+          {{ item.name! }} &nbsp; - &nbsp;
         } @else {
-          {{ song! }}
+          {{ item.name! }}
         }
         </div>
       </div>
-      <p>{{item.autor}}</p>
+      <p>{{item.artist}}</p>
     </ion-label>
     <ion-icon name="heart-outline" slot="end"></ion-icon>
 
     <div class="audio-player-container">
       <app-audio-player 
-        [audioSrc]="audioUrl"
+        [audioSrc]="item.url"
       />
     </div>
     
