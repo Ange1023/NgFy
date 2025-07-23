@@ -1,0 +1,92 @@
+<ion-modal trigger="open-modal" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
+  <ng-template>
+    <div class="block">
+
+      <div class="image-section">
+        <ion-thumbnail slot="start" (click)="selectImageFromGallery()">
+          <img [src]="form.imageURL || 'https://i.postimg.cc/65vGpZnx/descarga.png'" />
+        </ion-thumbnail>
+
+        <span class="image-label">Select a cover image</span>
+
+      </div>
+
+      <div class="file-row">
+        <label class="custom-file-label" for="audio-upload">
+          File Song
+        </label>
+        <span class="file-name">{{ form.selectedFile!.name || 'Select an audio file' }}</span>
+        <input
+          id="audio-upload"
+          type="file"
+          accept="audio/*"
+          class="file-input"
+          (change)="onAudioSelected($event)"
+
+        />
+      </div>
+
+      <ion-input 
+        label-placement="stacked"
+        fill="outline"
+        label="Song Name"
+        placeholder="Enter song name"
+        type="text"
+        shape="round"
+        [(ngModel)]="form.songName"
+      ></ion-input>
+
+      <div class="row">
+        <div class="input-container">
+          <ion-input 
+          label-placement="stacked"
+          label="Artist"
+          type="text"
+          shape="round"
+          fill="outline"
+          disabled="true"
+          value="{{ form.artistName }}"
+          />
+        </div>
+        
+        <div class="input-container duration">
+          <ion-input 
+          label-placement="stacked"
+          label="Duration"
+          placeholder="0:00"
+          type="text"
+          fill="outline"
+          shape="round"
+          disabled="true"
+          value="{{ form.durationValue }}"
+          />
+        </div>
+        
+      </div>
+
+      <div class="category-section">
+        <ion-select 
+          label="Category" 
+          placeholder="Select a category" 
+          interface="alert" 
+          fill="outline" 
+          shape="round"
+          [(ngModel)]="form.selectedCategories">
+          @for (category of categories; track category._id) {
+            <ion-select-option [value]="category._id">{{ category.name }}</ion-select-option>
+          }
+        </ion-select>
+
+      </div>
+
+      <div class="button-section">
+          <ion-button expand="block" fill="solid"  [disabled]="!isFormValid()" (click)="onSave()">
+            Save
+          </ion-button>
+      </div>
+    
+    </div>
+
+    
+  </ng-template>
+</ion-modal>

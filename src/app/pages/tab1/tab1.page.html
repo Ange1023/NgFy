@@ -10,10 +10,12 @@
 <ion-content [fullscreen]="true" class="ion-padding">
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" color="primary">
-    <ion-fab-button (click)="onClick()">
+    <ion-fab-button (click)="onClick()" id="open-modal" expand="block">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+
+  <app-song-modal/>
 
   <div class="media-list">
     @for (item of items; track $index) {

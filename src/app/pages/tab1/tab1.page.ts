@@ -5,12 +5,14 @@ import { MediaItemComponent } from 'src/app/shared/components/media-item/media-i
 import { addIcons } from 'ionicons';
 import { add } from 'ionicons/icons';
 import { SongService } from 'src/app/services/song.service';
+import { SongModalComponent } from 'src/app/shared/components/song-modal/song-modal.component';
+import { SongPage } from "../song/song.page";
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
-  imports: [IonicModule, MediaItemComponent],
+  imports: [IonicModule, MediaItemComponent, SongModalComponent],
 })
 export class Tab1Page {
   items: any[] = [];

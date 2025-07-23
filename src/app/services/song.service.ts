@@ -23,4 +23,15 @@ export class SongService {
       'GET'
     );
   }
+
+  getCategoriesSong(){
+    return this.http.request<any>(
+      'songs/categories', 
+      'GET'
+    );
+  }
+
+  createSong(formData: FormData) {
+    return this.http.request<any>('songs', 'POST', formData);
+  }
 }
