@@ -8,6 +8,25 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
+  <div class="media-list">
+    @for (item of items; track item.id) {
+      <app-media-item 
+        [id]="item.id"
+        [name]="item.name" 
+        [autor]="item.autor" 
+        [runtime]="item.runtime" 
+        [image]="item.image"
+        (itemClick)="onSongClick(item.id)"
+      ></app-media-item>
+    }
+  </div>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more songs...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" color="primary">
     <ion-fab-button (click)="onClick()" id="open-modal" expand="block">
@@ -16,18 +35,4 @@
   </ion-fab>
 
   <app-song-modal/>
-
-  <div class="media-list">
-    @for (item of items; track $index) {
-      <app-media-item 
-        [id]="item.id"
-        [name]="item.name" 
-        [autor]="item.autor" 
-        [runtime]="item.runtime" 
-        [image]="item.image"
-        (itemClick)="onSongClick(item.id)"
-      >
-    </app-media-item>
-    }
-  </div>
 </ion-content>
