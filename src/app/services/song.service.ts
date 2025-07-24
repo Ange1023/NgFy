@@ -17,6 +17,15 @@ export class SongService {
     );
   }
 
+  getUserPaginateSongs(currentPage: number, limit: number, artist: string) {
+    const body = { currentPage, limit , artist:artist };
+    return this.http.request<any>(
+      'songs/paginate', 
+      'POST',
+      body
+    );
+  }
+
   getSongById(id: string) {
     return this.http.request<any>(
       `songs/${id}`, 

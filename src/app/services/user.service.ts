@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http-service.service';
 import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +21,29 @@ export class UserService {
     this.getUserProfile().subscribe({
       next: (response) => {
         this.userProfileSubject.next(response.data);
-        console.log('User profile fetched and stored:', response.data);
-        
       }
     });
+  }
+
+  getUserSongs() {
+  return this.httpService.request<any>('user/profile', 'GET').pipe(
+      map(response => response.data.user.created_songs)
+    );
+  }
+
+  getUserFavoriteSongs() {
+  return this.httpService.request<any>('user/profile', 'GET').pipe(
+      map(response => response.data.user.favorite_songs)
+    );
+  }
+
+  getUserPlaylists(){
+    return this.httpService.request<any>('user/profile', 'GET').pipe(
+      map(response => ({
+        my_songs: response.data.user.created_songs.length,
+        favorites: response.data.user.favorite_songs.length,
+      }))
+    );
   }
 
   updateUserProfile(data: any) {

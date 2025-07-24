@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute } from '@angular/router';
 import { MediaItemComponent } from "src/app/shared/components/media-item/media-item.component";
 import { NavController } from '@ionic/angular';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-playlist',
@@ -17,81 +18,76 @@ export class PlaylistPage implements OnInit {
   private playlistId!: string | null;
   playlist: { id: number | string; name: string; image: string; numberOfTracks: number } | undefined;
 
-  item = [
-    { id: 1,name: 'Tears for fears', image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg', numberOfTracks: 10 },
-    { id: 2, name: 'Red Hot Chili Papers', image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg', numberOfTracks: 5 },
-    { id: 3, name: 'Nombre largo para ver si explota el componente', image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',numberOfTracks: 8 },
-    { id: "favorites", name: 'Favorites', image: '../../../../assets/my-favorites.png', numberOfTracks: 12 },
-    { id: "my-songs", name: 'Your songs', image: '../../../../assets/my-songs.png', numberOfTracks: 7 }
-  ]
 
-  items= [
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Yeah Yeah Yeahs'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Nombre largo para ver si explota el componente o se corta',
-      autor: 'Otro nombre largo para ver si explota el componente o se corta'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    },
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Autor 1'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 2',
-      autor: 'Autor 2'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    },
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Autor 1'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 2',
-      autor: 'Autor 2'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    }
-  ];
+  items: any[] = [];
   
-  constructor(private navCtrl: NavController) {
-
-  }
+  constructor(
+    private navCtrl: NavController,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       console.log('PlaylistPage ngOnInit', params);
       
       this.playlistId = params.get('id');
-      this.playlist = this.item.find(i => i.id == this.playlistId);
+
+      switch (this.playlistId) {
+        case 'favorites':
+          
+        this.playlist = {
+            id: 'favorites',
+            name: 'Favorites',
+            image: '../../../../assets/my-favorites.png',
+            numberOfTracks: 0
+          }
+
+          this.userService.getUserFavoriteSongs().subscribe({
+
+            next: (songs) => {
+
+              this.playlist!.numberOfTracks = songs.length;
+
+              this.items = songs.map((song: any) => ({
+                id: song._id,
+                runtime: song.duration,
+                image: song.poster_image,
+                name: song.title,
+                autor: song.artist
+              }));
+            }
+          });
+          break;
+
+        case 'my-songs':
+
+          this.playlist = {
+            id: 'my-songs',
+            name: 'Your Songs',
+            image: '../../../../assets/my-songs.png',
+            numberOfTracks: 0
+          };
+
+          this.userService.getUserSongs().subscribe({
+            next: (songs) => {
+
+              this.playlist!.numberOfTracks = songs.length;
+
+              this.items = songs.map((song: any) => ({
+                id: song._id,
+                runtime: song.duration,
+                image: song.poster_image,
+                name: song.title,
+                autor: song.artist
+              }));
+            }
+          });
+          break;
+        default:
+          console.log('Playlist ID no reconocido:', this.playlistId);
+          break;
+      }
+
     });
   }
 

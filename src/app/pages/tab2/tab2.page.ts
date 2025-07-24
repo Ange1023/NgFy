@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { MediaItemComponent } from '../../shared/components/media-item/media-item.component';
 import { addIcons } from 'ionicons';
 import { addCircleOutline } from 'ionicons/icons';
 import { NavController } from '@ionic/angular';
+import { SongService } from '../../services/song.service';
+import { UserService } from 'src/app/services/user.service';
 
 
 @Component({
@@ -20,8 +22,30 @@ export class Tab2Page {
     { id: 3, name: 'Item 3', image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',numberOfTracks: 8 },
   ]
 
-  constructor(private navCtrl: NavController) {
+  artistName: string = '';
+  userSongsNumber: number = 0;
+  favoriteSongsNumber: number = 0;
+
+  constructor(
+    private navCtrl: NavController,
+    private songService: SongService,
+    private userService: UserService
+  ) {
     addIcons({addCircleOutline})
+  }
+
+
+  ionViewWillEnter() {
+    this.userService.getUserPlaylists().subscribe({
+      next: (playlists) => {
+        this.userSongsNumber = playlists?.my_songs ?? 0;
+        this.favoriteSongsNumber = playlists?.favorites ?? 0;
+      },
+      error: (error) => {
+        this.userSongsNumber = 0;
+        this.favoriteSongsNumber = 0;
+      }
+    });
   }
 
   onItemClick(item_id: number | string) {
@@ -30,6 +54,8 @@ export class Tab2Page {
   this.navCtrl.navigateForward(['tabs', 'tab2', item_id], {
     animationDirection: 'forward' 
   });
+
+  
 
 }
 }

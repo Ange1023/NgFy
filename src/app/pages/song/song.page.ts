@@ -14,7 +14,7 @@ import { AudioPlayerComponent } from 'src/app/shared/components/audio-player/aud
   standalone: true,
   imports: [IonicModule, AudioPlayerComponent]
 })
-export class SongPage implements OnInit, AfterViewInit {
+export class SongPage implements OnInit {
 
   private activatedRoute = inject(ActivatedRoute);
   private songId!: string | null;
@@ -56,6 +56,16 @@ export class SongPage implements OnInit, AfterViewInit {
               url: songData.url
             };
 
+            setTimeout(() => {
+              const marquee = this.marqueeRef?.nativeElement;
+
+              const container = this.containerRef?.nativeElement;
+              if (marquee && container) {
+                this.shouldAnimate = marquee.scrollWidth > container.offsetWidth;
+
+              }
+            });
+
           },
         error: (error) => {
           console.error('Error al cargar la canción:', error);
@@ -63,16 +73,6 @@ export class SongPage implements OnInit, AfterViewInit {
       });
     }
   });
-  }
-
-  ngAfterViewInit() {
-    setTimeout(() => {
-      const marquee = this.marqueeRef?.nativeElement;
-      const container = this.containerRef?.nativeElement;
-      if (marquee && container) {
-        this.shouldAnimate = marquee.scrollWidth > container.offsetWidth;
-      }
-    });
   }
 
   goBack() {

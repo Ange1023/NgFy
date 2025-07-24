@@ -10,7 +10,7 @@
     <app-media-item
       [name]="'Favorites'"
       [image]="'../../../assets/my-favorites.png'"
-      [numberOfTracks]="5"
+      [numberOfTracks]="favoriteSongsNumber"
       [isPlaylist]="true"
       (itemClick)="onItemClick('favorites')"
     />
@@ -18,7 +18,7 @@
     <app-media-item
       [name]="'Your Songs'"
       [image]="'../../../assets/my-songs.png'"
-      [numberOfTracks]="5"
+      [numberOfTracks]="userSongsNumber"
       [isPlaylist]="true"
       (itemClick)="onItemClick('my-songs')"
     />

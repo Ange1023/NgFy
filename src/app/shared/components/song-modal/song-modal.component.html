@@ -15,7 +15,7 @@
         <label class="custom-file-label" for="audio-upload">
           File Song
         </label>
-        <span class="file-name">{{ form.selectedFile!.name || 'Select an audio file' }}</span>
+        <span class="file-name">{{ form.selectedFile?.name || 'Select an audio file' }}</span>
         <input
           id="audio-upload"
           type="file"
@@ -72,11 +72,10 @@
           fill="outline" 
           shape="round"
           [(ngModel)]="form.selectedCategories">
-          @for (category of categories; track category._id) {
-            <ion-select-option [value]="category._id">{{ category.name }}</ion-select-option>
+          @for (category of categories ; track category._id) {
+            <ion-select-option [value]="category._id">{{ category.name || 'Sin nombre'}}</ion-select-option>
           }
         </ion-select>
-
       </div>
 
       <div class="button-section">
