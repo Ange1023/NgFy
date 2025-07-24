@@ -15,7 +15,7 @@ interface RequestOptions {
 })
 export class HttpService {
 
-  private baseUrl: string = 'https://api.example.com';
+  private baseUrl: string = 'https://api-ngfy.onrender.com';
 
   constructor(private http: HttpClient) { }
 

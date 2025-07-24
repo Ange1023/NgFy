@@ -29,8 +29,14 @@
       </div>
       <p>{{item.artist}}</p>
     </ion-label>
-    <ion-icon name="heart-outline" slot="end"></ion-icon>
-
+    <ion-icon
+      [name]="isFavorite ? 'heart' : 'heart-outline'"
+      slot="end"
+      (click)="toggleFavorite($event)"
+      [class.heart-animate]="isAnimatingFavorite"
+      [class.heart-blue]="!isFavorite"
+      [class.heart-active]="isFavorite"
+    ></ion-icon>
     <div class="audio-player-container">
       <app-audio-player 
         [audioSrc]="item.url"

@@ -6,6 +6,7 @@ import { addIcons } from 'ionicons';
 import { add } from 'ionicons/icons';
 import { SongService } from 'src/app/services/song.service';
 import { SongModalComponent } from 'src/app/shared/components/song-modal/song-modal.component';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-tab1',
@@ -20,20 +21,33 @@ export class Tab1Page implements OnInit {
   isLoading = false;
   hasMoreData = true;
   totalPages = 1; // Añadir esta propiedad
+  favoriteSongs: any[] = [];
 
   constructor(
     private navCtrl: NavController,
-    private songService: SongService
+    private songService: SongService,
+    private userService: UserService
   ) {
     addIcons({ add });
   }
 
-  ngOnInit() {
-    this.loadInitialSongs();
+  ngOnInit() {}
+
+  ionViewWillEnter() {
+    this.userService.getUserFavoriteSongs().subscribe({
+      next: (songs) => {
+        this.favoriteSongs = songs;
+        this.loadInitialSongs(); 
+      }
+    });
   }
 
   loadInitialSongs() {
     if (this.isLoading) return;
+
+    this.items = [];
+    this.currentPage = 1;
+    this.hasMoreData = true;
 
     this.isLoading = true;
     
@@ -75,16 +89,20 @@ export class Tab1Page implements OnInit {
   }
 
   private processResponse(response: any) {
+
+    const favoriteIds = this.favoriteSongs.map(song => song._id);
+
     const newItems = response.data.data.map((song: any) => ({
       id: song._id,
       runtime: song.duration,
       image: song.poster_image,
       name: song.title,
-      autor: song.artist
+      autor: song.artist,
+      isFavorite: favoriteIds.includes(song._id),
     }));
 
     this.items = [...this.items, ...newItems];
-    this.totalPages = response.data.totalPages; // Asegúrate que la API devuelve esto
+    this.totalPages = response.data.totalPages; 
     this.hasMoreData = this.currentPage < this.totalPages;
 
     console.log(`Loaded ${newItems.length} items. Total: ${this.items.length}`);

@@ -1,4 +1,14 @@
 
+.heart-blue {
+  color: #2196f3 !important;
+}
+.heart-active {
+  color: #2196f3 !important;
+}
+
+.heart-animate {
+  animation: heartPop 0.4s cubic-bezier(.34,1.56,.64,1) forwards;
+}
 
 .centered-content {
     display: flex;

@@ -22,11 +22,14 @@
     <ion-icon slot="end" name="ellipsis-vertical" class="icon-top"></ion-icon>
   } @else {
     @if (!isPlaylist){
-      @if (isFavorite) {
-        <ion-icon slot="end" name="heart"></ion-icon>
-      } @else {
-        <ion-icon slot="end" name="heart-outline"></ion-icon>
-      }
+      <ion-icon
+        [name]="isFavorite ? 'heart' : 'heart-outline'"
+        slot="end"
+        (click)="toggleFavorite($event)"
+        [class.heart-animate]="isAnimatingFavorite"
+        [class.heart-blue]="!isFavorite"
+        [class.heart-active]="isFavorite"
+      ></ion-icon>
     } @else {
       @if(!isPreview){
         <ion-icon slot="end" name="chevron-forward-outline" color="primary"></ion-icon>

@@ -46,6 +46,10 @@ export class UserService {
     );
   }
 
+  toggleFavoriteSong(songId: string) {
+    return this.httpService.request<any>(`user/toggleFavorite/${songId}`, 'GET');
+  }
+
   updateUserProfile(data: any) {
     return this.httpService.request<any>('user/', 'PUT', data);
   }

@@ -5,6 +5,8 @@ import { UserService } from 'src/app/services/user.service';
 import { SongService } from 'src/app/services/song.service';
 import { CloudinaryService } from 'src/app/services/cloudinary.service';
 import { FormsModule } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-song-modal',
@@ -30,12 +32,16 @@ export class SongModalComponent  implements OnInit {
   constructor(
     private userService: UserService,
     private songService: SongService, 
-    private cloudinaryService: CloudinaryService
+    private cloudinaryService: CloudinaryService,
+    private modalCtrl: ModalController
+
   ) { }
 
   ngOnInit() {
     this.userService.userProfile$.subscribe(profile => {
-      this.form.artistName = profile!.user.user_name;
+      if (profile && profile.user && profile.user.user_name) {
+        this.form.artistName = profile.user.user_name;
+      }
     });
 
     this.songService.getCategoriesSong().subscribe(categories => {
@@ -111,6 +117,7 @@ export class SongModalComponent  implements OnInit {
     this.songService.createSong(formData).subscribe({
       next: (res) => {
         console.log('Canción guardada:', res);
+        this.closeModal();
       },
       error: (err) => {
         console.error('Error al guardar la canción:', err);
@@ -127,6 +134,19 @@ export class SongModalComponent  implements OnInit {
       this.form.selectedFile !== null &&
       this.form.selectedCategories.length > 0
     );  
+  }
+
+  closeModal() {
+    this.form = {
+      imageURL: "",
+      selectedFile: null,
+      songName: '',
+      artistName: '',
+      durationValue: '',
+      selectedCategories: '',
+    };
+    this.duration = 0;
+    this.modalCtrl.dismiss();
   }
 
 

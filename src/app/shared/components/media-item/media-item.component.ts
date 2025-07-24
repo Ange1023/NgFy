@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { ellipsisVertical, heart, heartOutline, chevronForwardOutline} from 'ionicons/icons';
-
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-media-item',
@@ -27,8 +27,9 @@ export class MediaItemComponent implements OnInit {
   @Input() id: string = '';
   @Output() itemClick = new EventEmitter<void>();
 
-  constructor() {
+  constructor(private userService: UserService) {
     addIcons({ heart, heartOutline, ellipsisVertical, chevronForwardOutline });
+  
   }
 
   formatRuntime(seconds: number): string {
@@ -38,5 +39,29 @@ export class MediaItemComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  isAnimatingFavorite = false;
+
+  toggleFavorite(event: Event) {
+    event.stopPropagation();
+    this.isFavorite = !this.isFavorite;
+    this.isAnimatingFavorite = true;
+    setTimeout(() => {
+      this.isAnimatingFavorite = false;
+    }, 400);
+    if (this.isFavorite) {
+      this.userService.toggleFavoriteSong(this.id).subscribe({
+        next: (response) => {
+          console.log('Agregado a favoritos:', response);
+        }
+      });
+    } else {
+      this.userService.toggleFavoriteSong(this.id).subscribe({
+        next: (response) => {
+          console.log('Eliminado de favoritos:', response);
+        }
+      });
+    }
+  }
 
 }
