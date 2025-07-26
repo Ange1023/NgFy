@@ -1,3 +1,18 @@
-<p>
-  playlist-modal works!
-</p>
+
+<div class="block">
+  <ion-input
+    label-placement="stacked"
+    fill="outline"
+    label="Playlist Name"
+    placeholder="Enter playlist name"
+    type="text"
+    shape="round"
+    [(ngModel)]="form.name"
+  ></ion-input>
+
+  <div class="button-section">
+    <ion-button expand="block" fill="solid" [disabled]="!isFormValid()" (click)="onSave()">
+      Save
+    </ion-button>
+  </div>
+</div>

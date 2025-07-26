@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
+type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
 interface RequestOptions {
   headers?: HttpHeaders;
@@ -42,6 +42,9 @@ export class HttpService {
         break;
       case 'DELETE':
         request$ = this.http.delete<T>(url, { headers });
+        break;
+      case 'PATCH':
+        request$ = this.http.patch<T>(url, data, { headers });
         break;
       default:
         return throwError(() => new Error(`Error de método: ${method}`));

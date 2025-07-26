@@ -3,6 +3,9 @@ import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { ellipsisVertical, heart, heartOutline, chevronForwardOutline} from 'ionicons/icons';
 import { UserService } from 'src/app/services/user.service';
+import { ModalController } from '@ionic/angular';
+import { MediaItemModalComponent } from '../media-item-modal/media-item-modal.component';
+
 
 @Component({
   selector: 'app-media-item',
@@ -25,9 +28,21 @@ export class MediaItemComponent implements OnInit {
   @Input() isPlaylist: boolean = false;
   @Input() isPreview: boolean = false;
   @Input() id: string = '';
-  @Output() itemClick = new EventEmitter<void>();
+  @Input() location: 'my-songs' | 'favorites' | 'playlist'| string = '';
 
-  constructor(private userService: UserService) {
+  @Output() itemClick = new EventEmitter<void>();
+  @Output() editItem = new EventEmitter<void>();
+  @Output() deleteItem = new EventEmitter<void>();
+  @Output() addToPlaylist = new EventEmitter<void>();
+  @Output() removeFromPlaylist = new EventEmitter<void>();
+  @Output() editPlaylist = new EventEmitter<void>();
+  @Output() deletePlaylist = new EventEmitter<void>();
+
+
+  constructor(
+    private userService: UserService,
+    private modalCtrl: ModalController
+  ) {
     addIcons({ heart, heartOutline, ellipsisVertical, chevronForwardOutline });
   
   }
@@ -38,30 +53,100 @@ export class MediaItemComponent implements OnInit {
     return `${min}:${sec.toString().padStart(2, '0')}`;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+
+  }
 
   isAnimatingFavorite = false;
 
-  toggleFavorite(event: Event) {
+  async openOptionsModal(event: Event) {
     event.stopPropagation();
+
+    let options: { name: string; key: string; danger?: boolean }[] = [];
+
+    if (this.location === 'my-songs') {
+      options = [
+        { name: 'Editar canción', key: 'editItem' },
+        { name: 'Agregar a playlist', key: 'addToPlaylist' },
+        { name: 'Eliminar canción', key: 'deleteItem', danger: true },
+      ];
+    } else if (this.location === 'playlist') {
+      options = [
+        { name: 'Editar playlist', key: 'editPlaylist' },
+        { name: 'Borrar playlist', key: 'deletePlaylist', danger: true }
+      ];
+    } else if (this.location === 'favorites') {
+      options = [
+        // { name: 'Agregar a playlist', key: 'addToPlaylist' },
+        { name: 'Eliminar de favoritos', key: 'toggleFavorite', danger: true }
+      ];
+    } else {
+      options = [
+        { name: 'Editar canción', key: 'editItem' },
+        { name: 'Agregar a playlist', key: 'addToPlaylist' },
+        { name: 'Eliminar de la playlist', key: 'removeFromPlaylist', danger: true },
+      ]
+    }
+
+    const modal = await this.modalCtrl.create({
+      component: MediaItemModalComponent,
+      componentProps: { options },
+      breakpoints: [0,0.2,1],
+      initialBreakpoint: 0.2, 
+      showBackdrop: true,
+    });
+    await modal.present();
+
+    const { data} = await modal.onDidDismiss();
+
+    if (data) {
+      this.handleModalAction(data);
+    }
+  }
+
+  handleModalAction(actionKey: string) {
+    switch (actionKey) {
+      case 'editItem':
+        this.editItem.emit();
+        break;
+      case 'addToPlaylist':
+        this.addToPlaylist.emit();
+        break;
+      case 'deleteItem':
+        this.deleteItem.emit();
+        break;
+      case 'editPlaylist':
+        this.editPlaylist.emit();
+        break;
+      case 'deletePlaylist':
+        this.deletePlaylist.emit();
+        break;
+      case 'toggleFavorite':
+        this.toggleFavorite();
+        break;
+      case 'removeFromPlaylist':
+        this.removeFromPlaylist.emit();
+        break;
+      default:
+        console.warn('Acción no reconocida:', actionKey);
+    }
+  }
+
+  toggleFavorite(event?: Event) {
+    event?.stopPropagation();
     this.isFavorite = !this.isFavorite;
+    
     this.isAnimatingFavorite = true;
     setTimeout(() => {
       this.isAnimatingFavorite = false;
     }, 400);
-    if (this.isFavorite) {
-      this.userService.toggleFavoriteSong(this.id).subscribe({
-        next: (response) => {
-          console.log('Agregado a favoritos:', response);
-        }
-      });
-    } else {
-      this.userService.toggleFavoriteSong(this.id).subscribe({
-        next: (response) => {
-          console.log('Eliminado de favoritos:', response);
-        }
-      });
+    
+    this.userService.toggleFavoriteSong(this.id).subscribe({
+    next: (response) => {
+      const msg = this.isFavorite ? 'Agregado a favoritos:' : 'Eliminado de favoritos:';
+      console.log(msg, response);
     }
+  });
   }
 
 }

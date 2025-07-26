@@ -19,7 +19,7 @@
   </ion-label>
 
   @if(isOwner){
-    <ion-icon slot="end" name="ellipsis-vertical" class="icon-top"></ion-icon>
+    <ion-icon slot="end" name="ellipsis-vertical" class="icon-top" (click)="openOptionsModal($event)"></ion-icon>
   } @else {
     @if (!isPlaylist){
       <ion-icon

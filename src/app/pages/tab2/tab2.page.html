@@ -12,7 +12,7 @@
       [image]="'../../../assets/my-favorites.png'"
       [numberOfTracks]="favoriteSongsNumber"
       [isPlaylist]="true"
-      (itemClick)="onItemClick('favorites')"
+      (itemClick)="onItemClick('favorites', 'Favorites', favoriteSongsNumber)"
     />
 
     <app-media-item
@@ -20,29 +20,31 @@
       [image]="'../../../assets/my-songs.png'"
       [numberOfTracks]="userSongsNumber"
       [isPlaylist]="true"
-      (itemClick)="onItemClick('my-songs')"
+      (itemClick)="onItemClick('my-songs', 'Your Songs', userSongsNumber)"
     />
   
   </div>
 
   <div class="list-header">
     <span>All playlist</span>
-    <ion-button fill="clear" class="icon-text-btn">
+    <ion-button fill="clear" class="icon-text-btn" (click)="openPlaylistModal()">
       <ion-icon slot="start" name="add-circle-outline"></ion-icon>
       Add new
     </ion-button>
   </div>
 
-
   <div class="media-list">
     @for (item of items; track $index) {
       <app-media-item 
         [name]="item.name" 
-        [image]="item.image"
-        [numberOfTracks]="item.numberOfTracks"
+        [image]="'https://ionicframework.com/docs/img/demos/thumbnail.svg'"
+        [numberOfTracks]="item.songs.length"
         [isPlaylist]="true"
         [isOwner]="true"
-        (itemClick)="onItemClick(item.id)"
+        (itemClick)="onItemClick(item._id, item.name, item.songs.length)"
+        [location]="'playlist'"
+        (editPlaylist)="openPlaylistModal(item._id)"
+        (deletePlaylist)="onDeletePlaylist(item._id)"
       />
     }
   </div>

@@ -1,15 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-playlist-modal',
   templateUrl: './playlist-modal.component.html',
   styleUrls: ['./playlist-modal.component.scss'],
   standalone: true,
+  imports: [IonicModule, FormsModule]
 })
-export class PlaylistModalComponent  implements OnInit {
+export class PlaylistModalComponent {
+  @Input() playlistName: string = '';
+  @Input() playlistId?: string;
 
-  constructor() { }
+  form = {
+    name: ''
+  };
 
-  ngOnInit() {}
+  constructor(private modalCtrl: ModalController) {}
 
+  ngOnInit() {
+    if (this.playlistName) {
+      this.form.name = this.playlistName;
+    }
+  }
+
+  isFormValid(): boolean {
+    return this.form.name.trim() !== '';
+  }
+
+  onSave() {
+    // Devuelve el nombre y el id si existe
+    this.modalCtrl.dismiss(
+      { name: this.form.name, id: this.playlistId },
+      this.playlistId ? 'edit' : 'save'
+    );
+  }
+
+  closeModal() {
+    this.form.name = '';
+    this.modalCtrl.dismiss(null, 'cancel');
+  }
 }

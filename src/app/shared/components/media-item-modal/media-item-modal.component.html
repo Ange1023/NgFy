@@ -1,0 +1,14 @@
+<div class="block">
+  <div class="button-section">
+
+  @for (option of options; track $index) {
+    <div 
+      class="modal-option" 
+      [class.danger]="option.danger"
+      (click)="selectOption(option.key)"
+    >
+      {{ option.name }}
+    </div>
+  }
+  </div>
+</div>

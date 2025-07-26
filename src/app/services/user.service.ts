@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpService } from './http-service.service';
 import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,7 @@ export class UserService {
 
   private userProfileSubject = new BehaviorSubject<any>(null);
   userProfile$ = this.userProfileSubject.asObservable();
+  userPlaylistChanged$ = new Subject<void>();
   
   constructor(private httpService: HttpService) { }
 
@@ -47,7 +49,13 @@ export class UserService {
   }
 
   toggleFavoriteSong(songId: string) {
-    return this.httpService.request<any>(`user/toggleFavorite/${songId}`, 'GET');
+    return this.httpService.request<any>(`user/toggleFavorite/${songId}`, 'GET')
+    .pipe(
+      map(response => {
+        this.userPlaylistChanged$.next();
+        return response.data;
+      })
+    )
   }
 
   updateUserProfile(data: any) {

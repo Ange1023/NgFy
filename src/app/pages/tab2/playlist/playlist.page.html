@@ -19,12 +19,18 @@
   <div class="media-list">
     @for (item of items; track $index) {
       <app-media-item 
+        [id]="item.id"
         [name]="item.name" 
         [autor]="item.autor" 
         [runtime]="item.runtime" 
         [image]="item.image"
         [isOwner]="true"
+        [location]="playlist!.id"
         (itemClick)="onSongClick(item.id)"
+        (editItem)="onEditItem()"
+        (addToPlaylist)="onAddToPlaylist()"
+        (deleteItem)="onDeleteItem()"
+        (removeFromPlaylist)="onRemoveFromPlaylist()"
       >
     </app-media-item>
     }
