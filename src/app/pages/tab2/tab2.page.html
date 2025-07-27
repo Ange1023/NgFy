@@ -14,7 +14,8 @@
       [isPlaylist]="true"
       (itemClick)="onItemClick('favorites', 'Favorites', favoriteSongsNumber)"
     />
-
+  
+    @if(isAuthor){
     <app-media-item
       [name]="'Your Songs'"
       [image]="'../../../assets/my-songs.png'"
@@ -22,7 +23,7 @@
       [isPlaylist]="true"
       (itemClick)="onItemClick('my-songs', 'Your Songs', userSongsNumber)"
     />
-  
+  }
   </div>
 
   <div class="list-header">
@@ -37,7 +38,7 @@
     @for (item of items; track $index) {
       <app-media-item 
         [name]="item.name" 
-        [image]="'https://ionicframework.com/docs/img/demos/thumbnail.svg'"
+        [image]="item.poster_image ?? 'https://ionicframework.com/docs/img/demos/thumbnail.svg'"
         [numberOfTracks]="item.songs.length"
         [isPlaylist]="true"
         [isOwner]="true"

@@ -19,7 +19,7 @@ import { MediaItemModalComponent } from '../media-item-modal/media-item-modal.co
 export class MediaItemComponent implements OnInit {
 
   @Input() runtime: number = 0;
-  @Input() image: string = '';
+  @Input() image: string ='https://i.postimg.cc/xTSJhVPn/Chat-GPT-Image-26-jun-2025-06-32-14-p-m.png' ;
   @Input() name: string = '';
   @Input() autor: string = '';
   @Input() isOwner: boolean = false;

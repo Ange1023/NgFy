@@ -32,7 +32,7 @@ export class PlaylistSelectorModalComponent  implements OnInit {
   loadPlaylists() {
     this.playlistService.getAllPlaylists().subscribe({
       next: (playlists) => {
-        this.playlists = playlists.data;
+        this.playlists = playlists;
       },
       error: (error) => {
         console.error('Error loading playlists:', error);

@@ -21,6 +21,7 @@ export class Tab2Page {
   userSongsNumber: number = 0;
   favoriteSongsNumber: number = 0;
   playlists: any[] = [];
+  isAuthor: boolean = false;
 
   constructor(
     private navCtrl: NavController,
@@ -40,7 +41,7 @@ export class Tab2Page {
   loadPlaylists() {
     this.playlistService.getAllPlaylists().subscribe({
       next: (playlists) => {
-        this.items = playlists.data;
+        this.items = playlists;
       }
     });
   }
@@ -57,6 +58,13 @@ export class Tab2Page {
   ngOnInit() {
     this.playlistService.playlistChanged$.subscribe(() => {
       this.loadPlaylists();
+    });
+
+    this.userService.userProfile$.subscribe({
+      next: (profile) => {
+        if(!profile) return;
+        this.isAuthor = profile.user.author ?? false;
+      }
     });
   }
 

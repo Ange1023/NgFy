@@ -7,7 +7,7 @@
           (click)="onPlaylistSelect(playlist._id)"
         >
           <ion-thumbnail slot="start">
-            <img src="{{playlist.image}}" />
+            <img src="{{playlist.poster_image ?? 'https://ionicframework.com/docs/img/demos/thumbnail.svg'}}" />
           </ion-thumbnail>
           <ion-label>
             <h2>{{playlist.name}}</h2>

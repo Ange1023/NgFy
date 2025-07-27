@@ -8,7 +8,6 @@ import { ActivatedRoute } from '@angular/router';
 import { AudioPlayerComponent } from 'src/app/shared/components/audio-player/audio-player.component';
 import { UserService } from 'src/app/services/user.service';
 
-
 @Component({
   selector: 'app-song',
   templateUrl: './song.page.html',

@@ -29,10 +29,12 @@
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
 
+  @if(isAuthor) {
   <ion-fab vertical="bottom" horizontal="end" slot="fixed" color="primary">
     <ion-fab-button (click)="onClick()" expand="block">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
   </ion-fab>
+  }
 
 </ion-content>

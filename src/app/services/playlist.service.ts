@@ -15,9 +15,11 @@ export class PlaylistService {
 
   getAllPlaylists() {
     return this.http.request<any>(
-      'playlists', 
+      'playlists/user', 
       'GET'
-    );
+    ).pipe(
+      map(response => response.data.data)
+      );
   }
 
   getPlaylistSongs(playlistId: string) {

@@ -177,6 +177,4 @@ export class SongModalComponent  implements OnInit {
     this.duration = 0;
     this.modalCtrl.dismiss();
   }
-
-
 }

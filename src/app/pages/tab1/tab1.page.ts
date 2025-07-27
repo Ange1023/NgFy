@@ -21,8 +21,9 @@ export class Tab1Page implements OnInit {
   limit = 20;
   isLoading = false;
   hasMoreData = true;
-  totalPages = 1; // Añadir esta propiedad
+  totalPages = 1; 
   favoriteSongs: any[] = [];
+  isAuthor: boolean = false;
 
   constructor(
     private navCtrl: NavController,
@@ -33,7 +34,14 @@ export class Tab1Page implements OnInit {
     addIcons({ add });
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.userService.userProfile$.subscribe({
+      next: (profile) => {
+        if (!profile) return;
+        this.isAuthor = profile.user.author ?? false;
+      }
+    });
+  }
 
   ionViewWillEnter() {
     this.userService.getUserFavoriteSongs().subscribe({
