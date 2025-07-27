@@ -27,14 +27,13 @@
         [isOwner]="true"
         [location]="playlist!.id"
         (itemClick)="onSongClick(item.id)"
-        (editItem)="onEditItem()"
-        (addToPlaylist)="onAddToPlaylist()"
-        (deleteItem)="onDeleteItem()"
-        (removeFromPlaylist)="onRemoveFromPlaylist()"
+        (editItem)="onEditItem(item.id)"
+        (addToPlaylist)="onAddToPlaylist(item.id)"
+        (deleteItem)="onDeleteItem(item.id)"
+        (removeFromPlaylist)="onRemoveFromPlaylist(item.id)"
       >
     </app-media-item>
     }
   </div>
- 
 
 </ion-content>

@@ -1,0 +1,18 @@
+
+<ion-content class="ion-padding">
+  <ion-list >
+      @for (playlist of playlists; track $index) {
+        <ion-item 
+          style="--background: black;"
+          (click)="onPlaylistSelect(playlist._id)"
+        >
+          <ion-thumbnail slot="start">
+            <img src="{{playlist.image}}" />
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{playlist.name}}</h2>
+          </ion-label>
+        </ion-item>
+      }
+  </ion-list>
+</ion-content>

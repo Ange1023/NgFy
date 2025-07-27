@@ -97,14 +97,22 @@ ion-select{
   display: flex;
   align-items: center;
   gap: 12px;
-  height: 48px;
+  height: 54px;
   border: 2px solid #626262;
   border-radius: 28px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   width: 100%;
   box-sizing: border-box;
 }
 
+.file-row.edit-mode {
+  background: #000000;
+  border-color: #222222;
+
+  label {
+    background-color: #222222;
+  }
+}
 .custom-file-label {
   display: flex;
   align-items: center;

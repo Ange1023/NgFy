@@ -1,28 +1,28 @@
-<ion-modal trigger="open-modal" [initialBreakpoint]="1" [breakpoints]="[0, 1]">
-  <ng-template>
+
     <div class="block">
 
       <div class="image-section">
-        <ion-thumbnail slot="start" (click)="selectImageFromGallery()">
+        <ion-thumbnail slot="start" (click)="!isEdit && selectImageFromGallery()" [class.disabled]="isEdit">
           <img [src]="form.imageURL || 'https://i.postimg.cc/65vGpZnx/descarga.png'" />
         </ion-thumbnail>
 
+      @if (!isEdit) {
         <span class="image-label">Select a cover image</span>
-
+      }
       </div>
 
-      <div class="file-row">
+      <div class="file-row" [ngClass]="{ 'edit-mode': isEdit }">
         <label class="custom-file-label" for="audio-upload">
           File Song
         </label>
-        <span class="file-name">{{ form.selectedFile?.name || 'Select an audio file' }}</span>
+        <span class="file-name">{{ form.selectedFile?.name || 'audio file' }}</span>
         <input
           id="audio-upload"
           type="file"
           accept="audio/*"
           class="file-input"
           (change)="onAudioSelected($event)"
-
+          [disabled]="isEdit"
         />
       </div>
 
@@ -71,7 +71,9 @@
           interface="alert" 
           fill="outline" 
           shape="round"
+          [disabled]="isEdit"
           [(ngModel)]="form.selectedCategories">
+          
           @for (category of categories ; track category._id) {
             <ion-select-option [value]="category._id">{{ category.name || 'Sin nombre'}}</ion-select-option>
           }
@@ -86,6 +88,3 @@
     
     </div>
 
-    
-  </ng-template>
-</ion-modal>

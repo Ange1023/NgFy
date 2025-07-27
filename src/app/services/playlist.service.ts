@@ -29,6 +29,32 @@ export class PlaylistService {
     );
   }
 
+  addSognToPlaylist(playlistId: string, songId: string) {
+    return this.http.request<any>(
+      `playlists/${playlistId}`, 
+      'PUT', 
+      { song_id: songId, action: 'add' }
+    ).pipe(
+      map(response => {
+        this.playlistChanged$.next();
+        return response.data;
+      })
+    );
+  }
+
+  removeSongFromPlaylist(playlistId: string, songId: string) {
+    return this.http.request<any>(
+      `playlists/${playlistId}`, 
+      'PUT', 
+      { song_id: songId, action: 'remove' }
+    ).pipe(
+      map(response => {
+        this.playlistChanged$.next();
+        return response.data;
+      })
+    );
+  }
+
   createPlaylist(name: string) {
 
     return this.http.request<any>(

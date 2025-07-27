@@ -43,4 +43,12 @@ export class SongService {
   createSong(formData: FormData) {
     return this.http.request<any>('songs', 'POST', formData);
   }
+
+  editSong(id: string,  name: string) {
+    return this.http.request<any>(`songs/${id}`, 'PUT',  { title: name });
+  }
+
+  deleteSong(id: string) {
+    return this.http.request<any>(`songs/${id}`, 'DELETE');
+  }
 }

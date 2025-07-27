@@ -7,12 +7,13 @@ import { add } from 'ionicons/icons';
 import { SongService } from 'src/app/services/song.service';
 import { SongModalComponent } from 'src/app/shared/components/song-modal/song-modal.component';
 import { UserService } from 'src/app/services/user.service';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
-  imports: [IonicModule, MediaItemComponent, SongModalComponent],
+  imports: [IonicModule, MediaItemComponent],
 })
 export class Tab1Page implements OnInit {
   items: any[] = [];
@@ -26,7 +27,8 @@ export class Tab1Page implements OnInit {
   constructor(
     private navCtrl: NavController,
     private songService: SongService,
-    private userService: UserService
+    private userService: UserService,
+    private modalCtrl: ModalController
   ) {
     addIcons({ add });
   }
@@ -110,6 +112,22 @@ export class Tab1Page implements OnInit {
   }
 
 
+  openModal(songData?: any, isEdit: boolean = false) {
+
+    this.modalCtrl.create({
+      component: SongModalComponent,
+      componentProps: {
+        songData: songData || null,
+        isEdit: isEdit
+      },
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
+      showBackdrop: true,
+    }).then(modal => {
+      modal.present();
+    });
+  }
+
   onSongClick(songId: number | string) {
     console.log('Click en canción:', songId);
     this.navCtrl.navigateForward(['tabs', 'tab1', songId], {
@@ -119,5 +137,7 @@ export class Tab1Page implements OnInit {
 
   onClick() {
     console.log('Add button clicked');
+    this.openModal();
   }
+
 }

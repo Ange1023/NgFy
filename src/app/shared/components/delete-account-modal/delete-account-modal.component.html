@@ -1,0 +1,18 @@
+<div class="modal-container">
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <div class="form-group">
+      <ion-input
+        label="Confirm Account Deletion"
+        labelPlacement="stacked"
+        fill="outline"
+        [formControl]="form.controls.key"
+        placeholder="Enter DELETE to confirm"
+        required
+        shape="round"
+      ></ion-input>
+    </div>
+    <div class="form-actions">
+      <ion-button type="submit" expand="block">Enviar</ion-button>
+    </div>
+  </form>
+</div>

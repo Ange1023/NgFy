@@ -59,10 +59,25 @@ export class UserService {
   }
 
   updateUserProfile(data: any) {
-    return this.httpService.request<any>('user/', 'PUT', data);
+    return this.httpService.request<any>('user/', 'PUT', data).
+    pipe(
+      map(response => {
+        this.userProfileSubject.next(response.data);
+        return response.data;
+      })  
+    )
   }
-  
-  deleteUserAccount(id: string) {
-    return this.httpService.request<any>(`user/${id}`, 'DELETE');
+
+  changePassword(current_password: string, new_password: string) {
+    return this.httpService.request<any>('user/profile', 'PUT', { current_password, new_password }).
+    pipe(
+      map(response => {
+        return response.data;
+      })
+    );
+  }
+
+  deleteUserAccount() {
+    return this.httpService.request<any>(`user`, 'DELETE');
   }
 }

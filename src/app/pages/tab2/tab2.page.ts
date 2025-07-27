@@ -78,8 +78,11 @@ export class Tab2Page {
 
     const { data, role } = await modal.onDidDismiss();
 
+    console.log('Modal dismissed with role:', role, 'and data:', data);
+    
+
     if (role === 'save' && data) {
-      this.onCreatePlaylist(data);
+      this.onCreatePlaylist(data.name);
     } else if (role === 'edit' && data) {
       this.onEditPlaylist(data);
     }

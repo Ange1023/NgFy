@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input} from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { UserService } from 'src/app/services/user.service';
@@ -6,6 +6,7 @@ import { SongService } from 'src/app/services/song.service';
 import { CloudinaryService } from 'src/app/services/cloudinary.service';
 import { FormsModule } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
@@ -13,9 +14,12 @@ import { ModalController } from '@ionic/angular';
   templateUrl: './song-modal.component.html',
   styleUrls: ['./song-modal.component.scss'],
   standalone: true,
-  imports: [IonicModule, FormsModule]
+  imports: [IonicModule, FormsModule, CommonModule]
 })
 export class SongModalComponent  implements OnInit {
+
+  @Input() songData: any;
+  @Input() isEdit: boolean = false;
 
   form = {
     imageURL: "",
@@ -38,6 +42,16 @@ export class SongModalComponent  implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    if (this.isEdit && this.songData) {
+      this.form.songName = this.songData.title;
+      this.form.artistName = this.songData.artist;
+      this.form.durationValue = this.formatRuntime(this.songData.duration);
+      this.form.imageURL = this.songData.poster_image;
+      this.form.selectedCategories = this.songData.category;
+      this.form.selectedFile = this.songData.file || null; 
+    }
+
     this.userService.userProfile$.subscribe(profile => {
       if (profile && profile.user && profile.user.user_name) {
         this.form.artistName = profile.user.user_name;
@@ -101,6 +115,7 @@ export class SongModalComponent  implements OnInit {
   }
 
   onSave() {
+
     const formData = new FormData();
     formData.append('poster_image', this.form.imageURL); 
     formData.append('title', this.form.songName);
@@ -114,6 +129,20 @@ export class SongModalComponent  implements OnInit {
       console.log('Archivo de audio agregado:', this.form.selectedFile);
     }
 
+
+    if (this.isEdit && this.songData) {
+      this.songService.editSong(this.songData._id, this.form.songName).subscribe({
+        next: (res) => {
+          console.log('Canción editada:', res);
+          this.closeModal();
+        },
+        error: (err) => {
+          console.error('Error al editar la canción:', err);
+        }
+      });
+      return;
+    }
+    
     this.songService.createSong(formData).subscribe({
       next: (res) => {
         console.log('Canción guardada:', res);
@@ -124,14 +153,14 @@ export class SongModalComponent  implements OnInit {
       }
     });
   }
-  isFormValid(): boolean {
 
+  isFormValid(): boolean {
     return (
       this.form.songName.trim() !== '' &&
       this.form.artistName.trim() !== '' &&
       this.form.durationValue.trim() !== '' &&
       this.form.imageURL.trim() !== '' &&
-      this.form.selectedFile !== null &&
+      (this.isEdit || this.form.selectedFile !== null) &&
       this.form.selectedCategories.length > 0
     );  
   }

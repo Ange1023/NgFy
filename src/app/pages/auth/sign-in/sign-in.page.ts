@@ -3,6 +3,7 @@ import { FormsModule, FormControl, FormGroup, Validators, ReactiveFormsModule } 
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -20,7 +21,8 @@ export class SignInPage implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private userService: UserService
   ) { }
 
   ngOnInit() {}
@@ -35,6 +37,7 @@ export class SignInPage implements OnInit {
       this.authService.signIn(credentials).subscribe({
         next: (response) => {
           console.log('Sign in successful', response);
+          this.userService.fetchAndStoreUserProfile();
           this.router.navigate(['tabs', 'tab1']); 
         },
         error: (error) => {

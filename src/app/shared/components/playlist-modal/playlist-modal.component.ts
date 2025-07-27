@@ -31,10 +31,10 @@ export class PlaylistModalComponent {
   }
 
   onSave() {
-    // Devuelve el nombre y el id si existe
+    const isEdit = !!this.playlistId && this.playlistId !== '';
     this.modalCtrl.dismiss(
       { name: this.form.name, id: this.playlistId },
-      this.playlistId ? 'edit' : 'save'
+      isEdit ? 'edit' : 'save'
     );
   }
 
