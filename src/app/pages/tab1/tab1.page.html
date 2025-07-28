@@ -2,13 +2,35 @@
   <ion-toolbar>
     <h2>Explore</h2>
   </ion-toolbar>
-  <ion-toolbar>
-    <ion-searchbar placeholder="Search" class="custom"></ion-searchbar>
+  <ion-toolbar class="search">
+    <div class="search-row">
+      <ion-searchbar placeholder="Search" class="custom" (ionInput)="onSearchInput($event)"></ion-searchbar>
+      <ion-icon name="options-outline" (click)="openCategorySelect(categorySelect)"></ion-icon>
+      <ion-select
+      #categorySelect
+      style="display: none"
+      [(ngModel)]="selectedCategory"
+      (ionChange)="onCategorySelected($event)"
+      interface="alert"
+      placeholder="Select a category"
+    >
+      <ion-select-option [value]="''">None</ion-select-option>
+      @for (category of categories ; track category._id) {
+        <ion-select-option [value]="category._id">{{ category.name || 'Sin nombre'}}</ion-select-option>
+      }
+    </ion-select>
+    </div>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   <div class="media-list">
+    @if(items.length === 0 && !isLoading) {
+      <div class="no-results">
+        <ion-icon name="alert-circle-outline" style="font-size: 32px; color: #ccc;"></ion-icon>
+        <p>No se encontraron canciones.</p>
+      </div>
+    }
     @for (item of items; track item.id) {
       <app-media-item 
         [id]="item.id"

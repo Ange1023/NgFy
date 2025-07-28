@@ -19,3 +19,45 @@ h2 {
     color: white;
     margin-left: 10px;
 }
+.search-row {
+  display: flex;
+  align-items: center;
+  width: 97%;
+}
+
+ion-searchbar.custom {
+  flex: 1;
+  margin-right: 10px;
+}
+
+ion-icon[name="options-outline"] {
+  font-size: 28px;
+  color: #fff;
+}
+
+ion-modal {
+  --height: 30%;
+  --border-radius: 16px;
+  --width: 80%;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+ion-modal::part(backdrop) {
+  background: rgb(28, 28, 28);
+  opacity: 1;
+}
+
+ion-modal ion-toolbar {
+  --background: rgb(14 116 144);
+  --color: white;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin-top: 200px;
+  color: #ccc;
+}

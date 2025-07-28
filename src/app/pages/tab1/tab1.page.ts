@@ -3,18 +3,22 @@ import { IonicModule } from '@ionic/angular';
 import { NavController } from '@ionic/angular';
 import { MediaItemComponent } from 'src/app/shared/components/media-item/media-item.component';
 import { addIcons } from 'ionicons';
-import { add } from 'ionicons/icons';
+import { add, alertCircleOutline, optionsOutline} from 'ionicons/icons';
 import { SongService } from 'src/app/services/song.service';
 import { SongModalComponent } from 'src/app/shared/components/song-modal/song-modal.component';
 import { UserService } from 'src/app/services/user.service';
 import { ModalController } from '@ionic/angular';
 import { AudioService } from 'src/app/services/audio.service';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
+import { SearchService } from 'src/app/services/search.service';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
-  imports: [IonicModule, MediaItemComponent],
+  imports: [IonicModule, MediaItemComponent, FormsModule],
 })
 export class Tab1Page implements OnInit {
   items: any[] = [];
@@ -25,15 +29,28 @@ export class Tab1Page implements OnInit {
   totalPages = 1; 
   favoriteSongs: any[] = [];
   isAuthor: boolean = false;
+  isCategoryModalOpen = false;
+  categories: any[] = [];
+  selectedCategory: string = '';
+  searchQuery: string = '';
+
+  private searchSubject = new Subject<string>();
 
   constructor(
     private navCtrl: NavController,
     private songService: SongService,
     private userService: UserService,
     private modalCtrl: ModalController,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private searchService: SearchService
   ) {
-    addIcons({ add });
+    addIcons({ add, optionsOutline, alertCircleOutline});
+
+    this.searchSubject.pipe(
+      debounceTime(400) 
+    ).subscribe(query => {
+      this.searchSongs(query);
+    });
   }
 
   ngOnInit() {
@@ -43,9 +60,12 @@ export class Tab1Page implements OnInit {
         this.isAuthor = profile.user.author ?? false;
       }
     });
-  }
 
-  ionViewWillEnter() {
+    this.songService.getCategoriesSong().subscribe(res => {
+      this.categories = res.data.categories;
+    });
+
+
     this.userService.getUserFavoriteSongs().subscribe({
       next: (songs) => {
         this.favoriteSongs = songs;
@@ -157,6 +177,48 @@ export class Tab1Page implements OnInit {
     this.navCtrl.navigateForward(['tabs', 'tab1', songId], {
       animationDirection: 'forward',
       state: { nextSongId }
+    });
+  }
+
+  openCategorySelect(selectRef: any) {
+    selectRef.open();
+  }
+
+  onCategorySelected(event: any) {
+  this.selectedCategory = event.detail.value;
+  this.searchQuery = ''; 
+  this.searchSongs('', this.selectedCategory); 
+  }
+    
+  onSearchInput(event: any) {
+    const query = event.target.value;
+    this.searchQuery = query;
+    this.selectedCategory = ''; 
+    this.searchSubject.next(query);
+  }
+
+  searchSongs(query: string, category?: string) {
+    if (!query && !category) {
+      this.loadInitialSongs();
+      return;
+    }
+    this.isLoading = true;
+    this.searchService.searchSongs(1, this.limit, query, category).subscribe({
+      next: (response) => {
+        this.items = response.data.data.map((song: any) => ({
+          id: song._id,
+          runtime: song.duration,
+          image: song.poster_image,
+          name: song.title,
+          autor: song.artist,
+          isFavorite: this.favoriteSongs.some(f => f._id === song._id),
+        }));
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error searching songs:', error);
+        this.isLoading = false;
+      }
     });
   }
 
