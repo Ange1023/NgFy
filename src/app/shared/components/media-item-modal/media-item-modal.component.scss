@@ -1,0 +1,32 @@
+
+
+:host ::ng-deep ion-modal {
+  --height: 20%;
+  --max-height: 80vh; 
+}
+
+.block {
+    height: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.button-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.modal-option {
+    color: var(--ion-color-primary);
+}
+
+.danger {
+    color: var(--ion-color-danger);
+}

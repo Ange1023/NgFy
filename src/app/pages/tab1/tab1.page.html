@@ -8,16 +8,33 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-
   <div class="media-list">
-    @for (item of items; track $index) {
+    @for (item of items; track item.id) {
       <app-media-item 
+        [id]="item.id"
         [name]="item.name" 
         [autor]="item.autor" 
-        [runtime]="formatRuntime(item.runtime)" 
+        [runtime]="item.runtime" 
         [image]="item.image"
-      >
-    </app-media-item>
+        [isFavorite]="item.isFavorite"
+        (itemClick)="onSongClick(item.id)"
+      ></app-media-item>
     }
   </div>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMoreData($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Loading more songs...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+
+  @if(isAuthor) {
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" color="primary">
+    <ion-fab-button (click)="onClick()" expand="block">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  }
+
 </ion-content>

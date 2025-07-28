@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start" (click)="goBack()">
+      <ion-back-button></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+
+  <div class="centered-content">
+    <ion-thumbnail>
+      <img [src]="item.image">
+    </ion-thumbnail>
+    <ion-label class="ion-text-center">
+      <div class="led-marquee-container" #container>
+        <div
+          class="led-marquee"
+          [class.animate]="shouldAnimate"
+          [attr.data-text]="shouldAnimate ? item.name : null"
+          #marquee
+        >
+        @if(shouldAnimate) {
+          {{ item.name! }} &nbsp; - &nbsp;
+        } @else {
+          {{ item.name! }}
+        }
+        </div>
+      </div>
+      <p>{{item.artist}}</p>
+    </ion-label>
+    <ion-icon
+      [name]="isFavorite ? 'heart' : 'heart-outline'"
+      slot="end"
+      (click)="toggleFavorite($event)"
+      [class.heart-animate]="isAnimatingFavorite"
+      [class.heart-blue]="!isFavorite"
+      [class.heart-active]="isFavorite"
+    ></ion-icon>
+    <div class="audio-player-container">
+      <app-audio-player
+        [audioSrc]="item.url"
+        [songId]="item.id"
+      ></app-audio-player>
+    </div>
+
+  </div>
+
+</ion-content>

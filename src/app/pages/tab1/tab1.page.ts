@@ -1,6 +1,13 @@
-import { Component } from '@angular/core';
-import {IonicModule} from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { IonicModule } from '@ionic/angular';
+import { NavController } from '@ionic/angular';
 import { MediaItemComponent } from 'src/app/shared/components/media-item/media-item.component';
+import { addIcons } from 'ionicons';
+import { add } from 'ionicons/icons';
+import { SongService } from 'src/app/services/song.service';
+import { SongModalComponent } from 'src/app/shared/components/song-modal/song-modal.component';
+import { UserService } from 'src/app/services/user.service';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-tab1',
@@ -8,68 +15,137 @@ import { MediaItemComponent } from 'src/app/shared/components/media-item/media-i
   styleUrls: ['tab1.page.scss'],
   imports: [IonicModule, MediaItemComponent],
 })
-export class Tab1Page {
-  items = [
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Yeah Yeah Yeahs'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 2',
-      autor: 'Autor 2'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    },
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Autor 1'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 2',
-      autor: 'Autor 2'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    },
-    {
-      runtime: 120,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Spitting Off the Edge Of the World',
-      autor: 'Autor 1'
-    },
-    {
-      runtime: 150,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 2',
-      autor: 'Autor 2'
-    },
-    {
-      runtime: 90,
-      image: 'https://ionicframework.com/docs/img/demos/thumbnail.svg',
-      name: 'Item 3',
-      autor: 'Autor 3'
-    }
-  ];
-  constructor() {}
+export class Tab1Page implements OnInit {
+  items: any[] = [];
+  currentPage = 1;
+  limit = 20;
+  isLoading = false;
+  hasMoreData = true;
+  totalPages = 1; 
+  favoriteSongs: any[] = [];
+  isAuthor: boolean = false;
 
-  formatRuntime(seconds: number): string {
-    const min = Math.floor(seconds / 60);
-    const sec = seconds % 60;
-    return `${min}:${sec.toString().padStart(2, '0')}`;
+  constructor(
+    private navCtrl: NavController,
+    private songService: SongService,
+    private userService: UserService,
+    private modalCtrl: ModalController
+  ) {
+    addIcons({ add });
   }
+
+  ngOnInit() {
+    this.userService.userProfile$.subscribe({
+      next: (profile) => {
+        if (!profile) return;
+        this.isAuthor = profile.user.author ?? false;
+      }
+    });
+  }
+
+  ionViewWillEnter() {
+    this.userService.getUserFavoriteSongs().subscribe({
+      next: (songs) => {
+        this.favoriteSongs = songs;
+        this.loadInitialSongs(); 
+      }
+    });
+  }
+
+  loadInitialSongs() {
+    if (this.isLoading) return;
+
+    this.items = [];
+    this.currentPage = 1;
+    this.hasMoreData = true;
+
+    this.isLoading = true;
+    
+    this.songService.getPaginateSongs(this.currentPage, this.limit).subscribe({
+      next: (response) => {
+        this.processResponse(response);
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading songs:', error);
+        this.isLoading = false;
+      }
+    });
+  }
+
+  loadMoreData(event: any) {
+    if (!this.hasMoreData || this.isLoading) {
+      event.target.complete();
+      return;
+    }
+
+    this.currentPage++;
+    this.isLoading = true;
+
+    console.log(`Loading page ${this.currentPage} of ${this.totalPages}`);
+
+    this.songService.getPaginateSongs(this.currentPage, this.limit).subscribe({
+      next: (response) => {
+        this.processResponse(response);
+        event.target.complete();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading more songs:', error);
+        event.target.complete();
+        this.isLoading = false;
+      }
+    });
+  }
+
+  private processResponse(response: any) {
+
+    const favoriteIds = this.favoriteSongs.map(song => song._id);
+
+    const newItems = response.data.data.map((song: any) => ({
+      id: song._id,
+      runtime: song.duration,
+      image: song.poster_image,
+      name: song.title,
+      autor: song.artist,
+      isFavorite: favoriteIds.includes(song._id),
+    }));
+
+    this.items = [...this.items, ...newItems];
+    this.totalPages = response.data.totalPages; 
+    this.hasMoreData = this.currentPage < this.totalPages;
+
+    console.log(`Loaded ${newItems.length} items. Total: ${this.items.length}`);
+    console.log(`Has more data: ${this.hasMoreData}`);
+  }
+
+
+  openModal(songData?: any, isEdit: boolean = false) {
+
+    this.modalCtrl.create({
+      component: SongModalComponent,
+      componentProps: {
+        songData: songData || null,
+        isEdit: isEdit
+      },
+      breakpoints: [0, 1],
+      initialBreakpoint: 1,
+      showBackdrop: true,
+    }).then(modal => {
+      modal.present();
+    });
+  }
+
+  onSongClick(songId: number | string) {
+    console.log('Click en canción:', songId);
+    this.navCtrl.navigateForward(['tabs', 'tab1', songId], {
+      animationDirection: 'forward' 
+    });
+  }
+
+  onClick() {
+    console.log('Add button clicked');
+    this.openModal();
+  }
+
 }

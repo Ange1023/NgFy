@@ -1,4 +1,9 @@
-<ion-item lines="none" class="shrink-on-press" (click)="itemClick.emit()">
+<ion-item 
+  lines="none" 
+  (click)="!isPreview && itemClick.emit()"
+  [class.shrink-on-press]="!isPreview"
+  [class.preview]="isPreview"
+  >
 
   <ion-thumbnail slot="start">
     <img src={{image}} />
@@ -7,23 +12,28 @@
   <ion-label>
     <h2>{{name}}</h2>
     @if(!isPlaylist){
-      <p>{{runtime}} - {{autor}}</p>
+      <p>{{formatRuntime(runtime)}} - {{autor}}</p>
     } @else {
       <p>{{numberOfTracks}} tracks</p>
     }
   </ion-label>
 
   @if(isOwner){
-    <ion-icon slot="end" name="ellipsis-vertical" class="icon-top"></ion-icon>
+    <ion-icon slot="end" name="ellipsis-vertical" class="icon-top" (click)="openOptionsModal($event)"></ion-icon>
   } @else {
     @if (!isPlaylist){
-      @if (isFavorite) {
-        <ion-icon slot="end" name="heart"></ion-icon>
-      } @else {
-        <ion-icon slot="end" name="heart-outline"></ion-icon>
-      }
+      <ion-icon
+        [name]="isFavorite ? 'heart' : 'heart-outline'"
+        slot="end"
+        (click)="toggleFavorite($event)"
+        [class.heart-animate]="isAnimatingFavorite"
+        [class.heart-blue]="!isFavorite"
+        [class.heart-active]="isFavorite"
+      ></ion-icon>
     } @else {
-      <ion-icon slot="end" name="chevron-forward-outline" color="primary"></ion-icon>
+      @if(!isPreview){
+        <ion-icon slot="end" name="chevron-forward-outline" color="primary"></ion-icon>
+      }
     }  
   }
   

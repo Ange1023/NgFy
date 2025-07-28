@@ -6,41 +6,46 @@
 
 <ion-content [fullscreen]="true" class="ion-padding">
 
-  <div class="list">
+  <div class="media-list">
     <app-media-item
       [name]="'Favorites'"
       [image]="'../../../assets/my-favorites.png'"
-      [numberOfTracks]="5"
+      [numberOfTracks]="favoriteSongsNumber"
       [isPlaylist]="true"
+      (itemClick)="onItemClick('favorites', 'Favorites', favoriteSongsNumber)"
     />
-
+  
+    @if(isAuthor){
     <app-media-item
       [name]="'Your Songs'"
       [image]="'../../../assets/my-songs.png'"
-      [numberOfTracks]="5"
+      [numberOfTracks]="userSongsNumber"
       [isPlaylist]="true"
+      (itemClick)="onItemClick('my-songs', 'Your Songs', userSongsNumber)"
     />
-  
+  }
   </div>
 
   <div class="list-header">
     <span>All playlist</span>
-    <ion-button fill="clear" class="icon-text-btn">
+    <ion-button fill="clear" class="icon-text-btn" (click)="openPlaylistModal()">
       <ion-icon slot="start" name="add-circle-outline"></ion-icon>
       Add new
     </ion-button>
   </div>
 
-
-  <div class="list">
+  <div class="media-list">
     @for (item of items; track $index) {
       <app-media-item 
         [name]="item.name" 
-        [image]="item.image"
-        [numberOfTracks]="item.numberOfTracks"
+        [image]="item.poster_image ?? 'https://ionicframework.com/docs/img/demos/thumbnail.svg'"
+        [numberOfTracks]="item.songs.length"
         [isPlaylist]="true"
         [isOwner]="true"
-        (itemClick)="onItemClick(item.id)"
+        (itemClick)="onItemClick(item._id, item.name, item.songs.length)"
+        [location]="'playlist'"
+        (editPlaylist)="openPlaylistModal(item._id)"
+        (deletePlaylist)="onDeletePlaylist(item._id)"
       />
     }
   </div>

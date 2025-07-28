@@ -1,15 +1,120 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      <h2>Profile</h2>
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logout()" class="text-left-icon-right">
+        <ion-icon name="exit-outline" slot="start"></ion-icon>
+        Logout
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content [fullscreen]="true" class="ion-padding">
+  <form [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+    <div class="data-profile">
+      <div class="input-row">
+        <ion-input
+          labelPlacement="stacked"
+          label="Username"
+          fill="solid"
+          [disabled]="!editUsername"
+          formControlName="username"
+          (ionBlur)="onInputBlur('username')">
+        </ion-input>
+        <ng-icon 
+          [name]="editedUsername ? 'matSendOutline' : 'matEditOutline'" 
+          size="25" 
+          (click)="editedUsername ? submitAndClose('username') : enableEdit('username')"
+          (mousedown)="editedUsername && clickedSend = true"
+          style="cursor:pointer; margin-left:8px;" />
+
+      </div>
+
+      <div class="input-row">
+        <ion-input
+          labelPlacement="stacked"
+          label="Name"
+          fill="solid"
+          [disabled]="!editName"
+          formControlName="name"
+          (ionBlur)="onInputBlur('name')">
+        </ion-input>
+        <ng-icon 
+          [name]="editedName ?'matSendOutline' : 'matEditOutline'" 
+          size="25" 
+          (click)="editedName ? submitAndClose('name') : enableEdit('name')" 
+          style="cursor:pointer; margin-left:8px;" 
+          (mousedown)="editedName && clickedSend = true"
+        />
+      </div>
+
+      <div class="input-row">
+        <ion-input
+          labelPlacement="stacked"
+          label="Last Name"
+          fill="solid"
+          [disabled]="!editLastName"
+          formControlName="last_name"
+          (ionBlur)="onInputBlur('last_name')">
+        </ion-input>
+        <ng-icon 
+          [name]="editedLastName ? 'matSendOutline' : 'matEditOutline'" 
+          size="25" 
+          (click)="editedLastName ? submitAndClose('last_name') : enableEdit('last_name')" 
+          style="cursor:pointer; margin-left:8px;" 
+          (mousedown)="editedLastName && clickedSend = true"
+        />
+    </div>
+
+      <div class="input-row">
+        <ion-input
+          labelPlacement="stacked"
+          label="Email"
+          type="email"
+          fill="solid"
+          [disabled]="!editEmail"
+          formControlName="email"
+          (ionBlur)="onInputBlur('email')">
+        </ion-input>
+        <ng-icon 
+          [name]="editedEmail ? 'matSendOutline' : 'matEditOutline'" 
+          size="25" 
+          (mousedown)="editedEmail && clickedSend = true"
+          (click)="editedEmail ? submitAndClose('email') : enableEdit('email')" 
+          style="cursor:pointer; margin-left:8px;" />
+      </div>
+    </div>
+  </form>
+
+  <ion-button expand="block" fill="outline" class="ion-margin-top text-left-icon-right" id="open-custom-dialog" >
+    <span class="button-text">Change Password</span>
+    <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+  </ion-button>
+
+  <ion-button expand="block" fill="outline" class="ion-margin-top danger text-left-icon-right" id="delete-account-modal">
+    <span class="button-text">Delete Account</span>
+    <ion-icon name="chevron-forward-outline" slot="end"></ion-icon>
+  </ion-button>
+
+
+  <ion-modal id="example-modal" #modal trigger="open-custom-dialog">
+    <ng-template>
+      <div class="wrapper">
+        <app-change-password-modal/>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal id="example-modal" #modal trigger="delete-account-modal">
+    <ng-template>
+      <div class="wrapper">
+        <app-delete-account-modal/>
+      </div>
+    </ng-template>
+  </ion-modal>
+
+
 </ion-content>

@@ -1,0 +1,24 @@
+ion-modal {
+    --height: 25%;
+}
+
+.block {
+    width: 100%;
+    padding-top: 50px;
+    padding-right: 20px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+ion-button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+ion-input{
+    --border-width: 2px;
+    --min-height: 45px;
+}

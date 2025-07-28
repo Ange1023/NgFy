@@ -1,0 +1,96 @@
+ion-toolbar {
+    --background: #121212;
+    --color: white;
+    --padding-end: 10px;
+}
+
+h2 {
+    color: white;
+}
+
+.data-profile {
+    gap: 15px;
+    display: flex;
+    flex-direction: column;
+    background-color: #1e1e1e;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    padding-left: 10px;
+    padding-right: 20px;
+    border-radius: 20px;
+}
+
+ion-input{
+    --border-width: 0px;
+    --border-color: black;
+    background: black;
+    --padding-start: 0px;
+}
+ion-button{
+    --border-radius: 10px;
+    letter-spacing: 0px;
+    height: 55px;
+    
+}
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-row ion-input {
+  flex: 1;
+}
+.readonly-input {
+  pointer-events: none;
+}
+
+.readonly-input:focus-within {
+  box-shadow: none !important;
+  border-color: var(--ion-color-light) !important;
+}
+
+.danger{
+    --border-color: rgb(122, 28, 28);
+    --color: rgb(186, 43, 43);
+}
+
+.text-left-icon-right {
+  justify-content: space-between !important;
+  
+  .button-text {
+    flex-grow: 1;
+    text-align: left;
+  }
+  
+  ion-icon {
+    margin-left: auto;
+  }
+}
+
+ion-modal#example-modal {
+  --width: fit-content;
+  --min-width: 250px;
+  --height: fit-content;
+  --border-radius: 6px;
+  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+}
+
+ion-modal#example-modal h1 {
+  margin: 20px 20px 10px 20px;
+}
+
+ion-modal#example-modal ion-icon {
+  margin-right: 6px;
+
+  width: 48px;
+  height: 48px;
+
+  padding: 4px 0;
+
+  color: #aaaaaa;
+}
+
+ion-modal#example-modal .wrapper {
+  margin-bottom: 10px;
+}
