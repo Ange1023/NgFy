@@ -60,7 +60,7 @@ export class SongPage implements OnInit {
   @ViewChild('container') containerRef!: ElementRef<HTMLDivElement>;
   shouldAnimate = false;
 
-  
+
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.songId = params.get('id');
@@ -72,7 +72,7 @@ export class SongPage implements OnInit {
             console.log('Song data:', response.data);
             
             this.item = {
-              id: songData._id,
+              id: songData._id || this.songId,
               runtime: songData.duration,
               image: songData.poster_image,
               name: songData.title,
