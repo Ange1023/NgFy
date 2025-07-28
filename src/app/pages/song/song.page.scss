@@ -10,6 +10,13 @@
   animation: heartPop 0.4s cubic-bezier(.34,1.56,.64,1) forwards;
 }
 
+.add-to-playlist-button {
+    position: absolute;
+    left: 65px;
+    bottom: 120px;
+    z-index: 10;
+}
+
 .centered-content {
     display: flex;
     flex-direction: column;
@@ -17,12 +24,18 @@
     height: 100%;
 }
 
-.audio-player-container {
-    width: 100%;
-    margin: 40px 0 0 0;
-    padding: 0 18px 0 18px;
+.next-song-container {
+    position: absolute;
+    right: 35px;
+    bottom: 90px;
+    z-index: 10;
 }
 
+.audio-player-container {
+    width: 100%;
+    margin: 40px 0 45px 0;
+    padding: 0 18px 0 18px;
+}
 
 ion-thumbnail {
     --size: 220px;

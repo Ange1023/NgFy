@@ -1,0 +1,13 @@
+<div class="next-song-stack" (click)="onClick()">
+  <div class="thumbnails">
+    <ion-thumbnail class="thumb-back">
+      <img [src]="image" alt="Previous Song" />
+    </ion-thumbnail>
+    <ion-thumbnail class="thumb-front">
+      <img [src]="image" alt="Next Song" />
+    </ion-thumbnail>
+  </div>
+  <div class="next-song-title">
+    <span>{{ title }}</span>
+  </div>
+</div>

@@ -43,6 +43,25 @@
         [songId]="item.id"
       />
     </div>
+
+    <div class="add-to-playlist-button">
+      <ion-button
+        (click)="openAddToPlaylistModal()"
+        fill="clear"
+        size="large"
+      >
+        <ion-icon slot="icon-only" name="add" size="large"> </ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="next-song-container">
+      <app-next-song
+        [id]="next_song.id"
+        [title]="next_song.title"
+        [image]="next_song.image"
+        (songClick)="onNextSongClick($event)"
+      />
+    </div>
     
   </div>
     
