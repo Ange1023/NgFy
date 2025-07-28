@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { NavController } from '@ionic/angular';
 
 export interface AudioState {
   songId: string | null;
@@ -22,6 +23,10 @@ export class AudioService {
     duration: 0,
     isPlaying: false
   });
+  
+  private playlistIds: string[] = [];
+  private currentIndex: number = -1;
+  private playlistId?: string;
 
   audioState$ = this.audioStateSubject.asObservable().pipe(
     distinctUntilChanged((prev, curr) => 
@@ -31,6 +36,8 @@ export class AudioService {
       Math.abs(prev.duration - curr.duration) < 0.1
     )
   );
+
+  constructor(private navCtrl: NavController) {}
 
   private cleanupAudio(audio: HTMLAudioElement | null) {
     if (!audio) return;
@@ -141,5 +148,53 @@ export class AudioService {
         currentTime: time
       });
     }
+  }
+  
+  setPlaylist(ids: string[], currentSongId: string, currentPlaylistId?: string) {
+    this.playlistIds = ids;
+    this.playlistId = currentPlaylistId;
+    this.currentIndex = ids.indexOf(currentSongId);
+
+    console.log(`Playlist set with ${ids.length} songs. Current song ID: ${currentSongId}, Playlist ID: ${currentPlaylistId}`);
+    
+  }
+
+  getNextSongId(): string | null {
+    return this.currentIndex < this.playlistIds.length - 1
+      ? this.playlistIds[this.currentIndex + 1]
+      : null;
+  }
+
+  getPreviousSongId(): string | null {
+    return this.currentIndex > 0
+      ? this.playlistIds[this.currentIndex - 1]
+      : null;
+  }
+
+  private navigateToSong(songId: string) {
+    const route = this.playlistId
+    ? ['/tabs', 'tab2', this.playlistId, songId]
+    : ['/tabs', 'tab1', songId];
+
+    const nextIndex = (this.currentIndex + 1) % this.playlistIds.length;
+    const nextSongId = this.playlistIds[nextIndex];
+
+    const navExtras = {
+      state: { nextSongId }
+    };
+
+    this.navCtrl.navigateRoot(route, navExtras);
+  }
+
+  goToNextSong() {
+    if (!this.playlistIds.length) return;
+    this.currentIndex = (this.currentIndex + 1) % this.playlistIds.length;
+    this.navigateToSong(this.playlistIds[this.currentIndex]);
+  }
+
+  goToPreviousSong() {
+    if (!this.playlistIds.length) return;
+    this.currentIndex = (this.currentIndex - 1 + this.playlistIds.length) % this.playlistIds.length;
+    this.navigateToSong(this.playlistIds[this.currentIndex]);
   }
 }

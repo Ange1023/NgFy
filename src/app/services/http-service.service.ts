@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 
@@ -15,7 +16,7 @@ interface RequestOptions {
 })
 export class HttpService {
 
-  private baseUrl: string = 'https://api-ngfy.onrender.com';
+  private baseUrl: string = environment.apiUrl;
 
   constructor(private http: HttpClient) { }
 

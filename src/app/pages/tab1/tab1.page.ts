@@ -8,6 +8,7 @@ import { SongService } from 'src/app/services/song.service';
 import { SongModalComponent } from 'src/app/shared/components/song-modal/song-modal.component';
 import { UserService } from 'src/app/services/user.service';
 import { ModalController } from '@ionic/angular';
+import { AudioService } from 'src/app/services/audio.service';
 
 @Component({
   selector: 'app-tab1',
@@ -29,7 +30,8 @@ export class Tab1Page implements OnInit {
     private navCtrl: NavController,
     private songService: SongService,
     private userService: UserService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private audioService: AudioService
   ) {
     addIcons({ add });
   }
@@ -136,10 +138,25 @@ export class Tab1Page implements OnInit {
     });
   }
 
-  onSongClick(songId: number | string) {
+  onSongClick(songId: string) {
     console.log('Click en canción:', songId);
+
+    let nextSongId  = null;
+
+    if (this.items){
+      const ids= this.items.map(item => item.id);
+      this.audioService.setPlaylist(ids, songId);
+
+      nextSongId = this.audioService.getNextSongId();
+
+      const navExtras = {
+        state: { nextSongId }
+      };
+    }
+
     this.navCtrl.navigateForward(['tabs', 'tab1', songId], {
-      animationDirection: 'forward' 
+      animationDirection: 'forward',
+      state: { nextSongId }
     });
   }
 

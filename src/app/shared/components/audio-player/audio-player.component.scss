@@ -16,8 +16,16 @@
     --bar-height: 6px;
     --knob-size: 16px;
     --height: 30px;
+    --bar-background: rgb(183, 183, 183);
+    --bar-border-radius: 10px;
+    --bar-background-active: #2196f3;
     
     padding: 0;
+}
+
+ion-icon{
+   color: white;
+   font-size: 24px;
 }
 
 .controls {
@@ -40,6 +48,6 @@
 
 .play-pause-button {
     ion-icon {
-        font-size: 40px;
+        font-size: 45px;
     }
 }

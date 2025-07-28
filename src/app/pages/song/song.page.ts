@@ -2,7 +2,7 @@ import { Component, OnInit, inject, ViewChild, ElementRef, AfterViewInit} from '
 import { NavController } from '@ionic/angular';
 import { IonicModule } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { heartOutline, add } from 'ionicons/icons';
+import { heartOutline, addSharp } from 'ionicons/icons';
 import { SongService } from 'src/app/services/song.service';
 import { ActivatedRoute } from '@angular/router';
 import { AudioPlayerComponent } from 'src/app/shared/components/audio-player/audio-player.component';
@@ -11,6 +11,7 @@ import { NextSongComponent } from 'src/app/shared/components/next-song/next-song
 import { ModalController } from '@ionic/angular';
 import { PlaylistService } from 'src/app/services/playlist.service';
 import { PlaylistSelectorModalComponent } from 'src/app/shared/components/playlist-selector-modal/playlist-selector-modal.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-song',
@@ -23,6 +24,7 @@ export class SongPage implements OnInit {
 
   private activatedRoute = inject(ActivatedRoute);
   private songId!: string | null;
+  private nextSongId!: string | null;
 
   isFavorite: boolean = false;
   isAnimatingFavorite: boolean = false;
@@ -47,12 +49,12 @@ export class SongPage implements OnInit {
     private songService: SongService,
     private userService: UserService,
     private modalCtrl: ModalController,
-    private playlistService: PlaylistService
+    private playlistService: PlaylistService,
+    private router: Router
   ) {
     addIcons({
       heartOutline,
-      add
-      
+      addSharp,
     });
   }
 
@@ -62,48 +64,63 @@ export class SongPage implements OnInit {
 
 
   ngOnInit() {
+    const nav = this.router.getCurrentNavigation();
+    this.nextSongId = nav?.extras.state?.['nextSongId'];
+
     this.activatedRoute.paramMap.subscribe(params => {
       this.songId = params.get('id');
-      if (this.songId) {
-        this.songService.getSongById(this.songId).subscribe({
-          next: (response) => {
-            const songData = response.data.song;
-            const nextSongData = response.data.similar;
-            console.log('Song data:', response.data);
-            
-            this.item = {
-              id: songData._id || this.songId,
-              runtime: songData.duration,
-              image: songData.poster_image,
-              name: songData.title,
-              artist: songData.artist,
-              url: songData.url
-            };
+      if (!this.songId) return;
 
-            this.next_song = {
-              id: nextSongData._id,
-              title: nextSongData.title,
-              image: nextSongData.poster_image
-            };
+      this.loadSong(this.songId);
+      this.checkIfFavorite(this.songId);
 
-            this.userService.getUserFavoriteSongs().subscribe({
-              next: (favorites) => {
-                this.isFavorite = favorites.some((song: any) => song._id === this.songId);
-              }
-            });
+      if (this.nextSongId) {
+        this.loadNextSong(this.nextSongId);
+      }
+    });
+  }
 
-            setTimeout(() => {
-              const marquee = this.marqueeRef?.nativeElement;
-              const container = this.containerRef?.nativeElement;
-              if (marquee && container) {
-                this.shouldAnimate = marquee.scrollWidth > container.offsetWidth;
-              }
-            });
-          },
-          error: (error) => {
-            console.error('Error al cargar la canción:', error);
-          }
+  private loadSong(songId: string) {
+    this.songService.getSongById(songId).subscribe({
+      next: ({ data }) => {
+        const song = data.song;
+        this.item = {
+          id: song._id || songId,
+          runtime: song.duration,
+          image: song.poster_image,
+          name: song.title,
+          artist: song.artist,
+          url: song.url
+        };
+
+        setTimeout(() => {
+          const marquee = this.marqueeRef?.nativeElement;
+          const container = this.containerRef?.nativeElement;
+          this.shouldAnimate = !!(marquee && container && marquee.scrollWidth > container.offsetWidth);
         });
+      },
+      error: err => console.error('Error al cargar la canción:', err)
+    });
+  }
+
+  private loadNextSong(nextSongId: string) {
+    this.songService.getSongById(nextSongId).subscribe({
+      next: ({ data }) => {
+        const song = data.song;
+        this.next_song = {
+          id: song._id || nextSongId,
+          title: song.title,
+          image: song.poster_image
+        };
+      },
+      error: err => console.error('Error al cargar la siguiente canción:', err)
+    });
+  }
+
+  private checkIfFavorite(songId: string) {
+    this.userService.getUserFavoriteSongs().subscribe({
+      next: favorites => {
+        this.isFavorite = favorites.some((s: any) => s._id === songId);
       }
     });
   }

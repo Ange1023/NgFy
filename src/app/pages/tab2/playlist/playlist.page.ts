@@ -9,6 +9,7 @@ import { PlaylistSelectorModalComponent } from 'src/app/shared/components/playli
 import { ModalController } from '@ionic/angular';
 import { SongModalComponent } from 'src/app/shared/components/song-modal/song-modal.component';
 import { SongService } from 'src/app/services/song.service';
+import { AudioService } from 'src/app/services/audio.service';
 
 
 import { Router } from '@angular/router';
@@ -34,7 +35,8 @@ export class PlaylistPage implements OnInit {
     private playlistService: PlaylistService,
     private router: Router,
     private modalCtrl: ModalController,
-    private songService: SongService
+    private songService: SongService,
+    private audioService: AudioService
   ) {}
 
   ngOnInit() {
@@ -102,7 +104,12 @@ export class PlaylistPage implements OnInit {
     }));
   }
 
-  onSongClick(songId: number | string) {
+  onSongClick(songId:string) {
+
+    const itemsIds = this.items.map(item => item.id);
+    this.audioService.setPlaylist(itemsIds, songId, this.playlistId!);
+
+
     this.navCtrl.navigateForward(['tabs', 'tab2', this.playlistId , songId], {
       animationDirection: 'forward' 
     });

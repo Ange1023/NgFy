@@ -38,10 +38,10 @@
       [class.heart-active]="isFavorite"
     ></ion-icon>
     <div class="audio-player-container">
-      <app-audio-player 
+      <app-audio-player
         [audioSrc]="item.url"
         [songId]="item.id"
-      />
+      ></app-audio-player>
     </div>
 
     <div class="add-to-playlist-button">
@@ -50,7 +50,7 @@
         fill="clear"
         size="large"
       >
-        <ion-icon slot="icon-only" name="add" size="large"> </ion-icon>
+        <ion-icon slot="icon-only" name="add-sharp" style="font-size: 40px; color: white;"> </ion-icon>
       </ion-button>
     </div>
 
@@ -64,5 +64,5 @@
     </div>
     
   </div>
-    
+
 </ion-content>

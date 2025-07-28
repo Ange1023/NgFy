@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -38,15 +38,26 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
     this.subscribeToAudio();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if ((changes['audioSrc'] && this.audioSrc) || (changes['songId'] && this.songId)) {
+      this.subscribeToAudio();
+      if (!this.isPlaying && this.audioSrc && this.songId) {
+        this.togglePlay();
+      }
+    }
+  }
+
   ngOnDestroy() {
     this.audioSub?.unsubscribe();
   }
 
   private subscribeToAudio() {
+
     this.audioSub?.unsubscribe();
-    
+
     this.audioSub = this.audioService.audioState$.subscribe(state => {
       // Only update if it's our song or if the audio is stopped
+
       if (state.songId === this.songId || (!state.isPlaying && this.isPlaying)) {
         this.isPlaying = state.isPlaying;
         this.currentTime = state.currentTime;
@@ -70,11 +81,11 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
   }
 
   nextSong() {
-    // Implement your playlist logic here
+    this.audioService.goToNextSong();
   }
 
   previousSong() {
-    // Implement your playlist logic here
+    this.audioService.goToPreviousSong();
   }
 
   formatTime(seconds: number): string {

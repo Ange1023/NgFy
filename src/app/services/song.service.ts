@@ -11,7 +11,7 @@ export class SongService {
   getPaginateSongs(currentPage: number, limit: number) {
     const body = { currentPage, limit };
     return this.http.request<any>(
-      'songs/paginate', 
+      'songs/paginate',
       'POST',
       body
     );
@@ -20,7 +20,7 @@ export class SongService {
   getUserPaginateSongs(currentPage: number, limit: number, artist: string) {
     const body = { currentPage, limit , artist:artist };
     return this.http.request<any>(
-      'songs/paginate', 
+      'songs/paginate',
       'POST',
       body
     );
@@ -28,14 +28,14 @@ export class SongService {
 
   getSongById(id: string) {
     return this.http.request<any>(
-      `songs/${id}`, 
+      `songs/${id}`,
       'GET'
     );
   }
 
   getCategoriesSong(){
     return this.http.request<any>(
-      'songs/categories', 
+      'songs/categories',
       'GET'
     );
   }
