@@ -24,6 +24,7 @@ export class SongPage implements OnInit {
   isAnimatingFavorite: boolean = false;
 
   item: any = {
+    id: '',
     runtime: '',
     image: '',
     name: '',
@@ -45,7 +46,7 @@ export class SongPage implements OnInit {
   @ViewChild('container') containerRef!: ElementRef<HTMLDivElement>;
   shouldAnimate = false;
 
-  
+
   ngOnInit() {
     this.activatedRoute.paramMap.subscribe(params => {
       this.songId = params.get('id');
@@ -54,6 +55,7 @@ export class SongPage implements OnInit {
           next: (response) => {
             const songData = response.data.song;
             this.item = {
+              id: songData._id || this.songId,
               runtime: songData.duration,
               image: songData.poster_image,
               name: songData.title,

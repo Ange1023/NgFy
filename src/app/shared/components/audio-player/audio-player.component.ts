@@ -43,10 +43,12 @@ export class AudioPlayerComponent implements OnInit, OnDestroy {
   }
 
   private subscribeToAudio() {
+
     this.audioSub?.unsubscribe();
-    
+
     this.audioSub = this.audioService.audioState$.subscribe(state => {
       // Only update if it's our song or if the audio is stopped
+
       if (state.songId === this.songId || (!state.isPlaying && this.isPlaying)) {
         this.isPlaying = state.isPlaying;
         this.currentTime = state.currentTime;
