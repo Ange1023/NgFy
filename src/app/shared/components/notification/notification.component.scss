@@ -1,0 +1,55 @@
+.notification-wrapper {
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 1000;
+  pointer-events: none;
+  
+  .notification-card {
+    max-width: 90%;
+    width: 100%;
+    margin: 0 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    pointer-events: auto;
+
+    &.success {
+      --background: #20567a;
+      --color: #ffffff;
+      color: #fff;
+    }
+
+    &.error {
+      --background: #d50000;
+      --color: #ffffff;
+    }
+
+    .notification-content {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      
+      ion-icon {
+        margin-right: 12px;
+        font-size: 20px;
+      }
+      
+      .notification-message {
+        flex: 1;
+        font-size: 14px;
+      }
+      
+      ion-button {
+        --padding-start: 8px;
+        --padding-end: 8px;
+        margin-left: 8px;
+      }
+    }
+  }
+}
+
+ion-icon {
+  color: white;
+}

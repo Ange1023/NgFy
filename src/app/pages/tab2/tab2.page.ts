@@ -8,6 +8,7 @@ import { UserService } from 'src/app/services/user.service';
 import { PlaylistModalComponent } from "src/app/shared/components/playlist-modal/playlist-modal.component";
 import { PlaylistService } from 'src/app/services/playlist.service';
 import { ModalController } from '@ionic/angular';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-tab2',
@@ -27,7 +28,8 @@ export class Tab2Page {
     private navCtrl: NavController,
     private userService: UserService,
     private playlistService: PlaylistService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private notification: NotificationService
   ) {
     addIcons({addCircleOutline})
   }
@@ -125,6 +127,12 @@ export class Tab2Page {
         console.log('Playlist created successfully:', response);
       }
     });
+
+  this.notification.show({
+    message: 'Operación exitosa',
+    type: 'success',
+    duration: 2000
+  });
   }
 
   onItemClick(item_id: number | string, item_name: string = '', item_numberOfTracks: number = 0) {

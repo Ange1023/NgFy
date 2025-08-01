@@ -3,6 +3,7 @@ import { FormsModule, FormControl, FormGroup, Validators, ReactiveFormsModule } 
 import { IonicModule } from '@ionic/angular';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -24,7 +25,8 @@ export class SignUpPage implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private notification: NotificationService
   ) { }
 
   ngOnInit() {
@@ -39,6 +41,10 @@ export class SignUpPage implements OnInit {
       },
       error: (error) => {
         console.error('Sign up failed', error);
+        this.notification.show({
+          message: error.message,
+          type: 'error'
+        });
       },
       complete: () => {
         console.log('Sign up request completed');

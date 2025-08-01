@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserService } from 'src/app/services/user.service';
+import { NotificationService } from 'src/app/services/notification.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -22,7 +23,8 @@ export class SignInPage implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private notification: NotificationService
   ) { }
 
   ngOnInit() {}
@@ -42,6 +44,10 @@ export class SignInPage implements OnInit {
         },
         error: (error) => {
           console.error('Sign in failed', error);
+          this.notification.show({
+            message: 'Email or password is incorrect',
+            type: 'error'
+          });
         },
         complete: () => {
           console.log('Sign in request completed');

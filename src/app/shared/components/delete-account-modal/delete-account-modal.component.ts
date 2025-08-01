@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ModalController, IonicModule } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RouterModule, Router } from '@angular/router';
 
 @Component({
   selector: 'app-delete-account-modal',
@@ -17,7 +18,8 @@ export class DeleteAccountModalComponent {
 
   constructor(
     private modalCtrl: ModalController,
-    private userService: UserService
+    private userService: UserService,
+    private router: Router
   ) {}
 
   submit() {
@@ -30,6 +32,8 @@ export class DeleteAccountModalComponent {
       this.userService.deleteUserAccount().subscribe({
         next: () => {
           this.modalCtrl.dismiss();
+          this.router.navigate(['/sign-in']);
+
         },
         error: (err) => {
           console.error('Error deleting account:', err);

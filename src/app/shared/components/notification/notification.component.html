@@ -1,0 +1,14 @@
+
+@if(show){
+  <div @fadeInOut class="notification-wrapper">
+    <ion-card [class]="getColor()" class="notification-card">
+      <ion-card-content class="notification-content">
+        <ion-icon [name]="getIcon()" slot="start"></ion-icon>
+      <span class="notification-message">{{ message }}</span>
+      <ion-button fill="clear" size="small" (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</div>
+}

@@ -192,8 +192,8 @@ export class PlaylistPage implements OnInit {
     this.modalCtrl.create({
       component: PlaylistSelectorModalComponent,
       componentProps: { songId: songId },
-      breakpoints: [0, 1],
-      initialBreakpoint: 1,
+      breakpoints: [0,0.3, 1],
+      initialBreakpoint: 0.3,
       showBackdrop: true,
     }).then(modal => {
 

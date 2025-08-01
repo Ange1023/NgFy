@@ -58,6 +58,6 @@ export class HttpService {
 
   private handleError(error: HttpErrorResponse): Observable<never> {
     console.error('Error en la petición HTTP:', error.error);
-    return throwError(() => new Error(error.message));
+    return throwError(() => new Error(error.error.message));
   }
 }
